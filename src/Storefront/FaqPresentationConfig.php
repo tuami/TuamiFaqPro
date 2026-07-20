@@ -17,7 +17,7 @@ final class FaqPresentationConfig
         return $headline !== '' ? $headline : 'Häufig gestellte Fragen';
     }
 
-    /** @return array{widthMode:string,maxWidth:int,itemGap:int,borderRadius:int,useItemBackground:bool,itemBackgroundColor:string,activeBackgroundColor:string,activeTextColor:string,openFirstItem:bool} */
+    /** @return array{layoutStyle:string,widthMode:string,maxWidth:int,itemGap:int,borderRadius:int,dividerColor:string,useItemBackground:bool,itemBackgroundColor:string,activeBackgroundColor:string,activeTextColor:string,openFirstItem:bool} */
     public function style(string $salesChannelId): array
     {
         $widthMode = (string) ($this->systemConfigService->get('TuamiFaqPro.config.widthMode', $salesChannelId) ?? 'standard');
@@ -25,14 +25,21 @@ final class FaqPresentationConfig
             $widthMode = 'standard';
         }
 
+        $layoutStyle = (string) ($this->systemConfigService->get('TuamiFaqPro.config.layoutStyle', $salesChannelId) ?? 'cards');
+        if (!\in_array($layoutStyle, ['cards', 'dividers'], true)) {
+            $layoutStyle = 'cards';
+        }
+
         $customMaxWidth = $this->integer('customMaxWidth', $salesChannelId, 1200, 320, 2400);
         $activeColorMode = (string) ($this->systemConfigService->get('TuamiFaqPro.config.activeColorMode', $salesChannelId) ?? 'primary');
 
         return [
+            'layoutStyle' => $layoutStyle,
             'widthMode' => $widthMode,
             'maxWidth' => $widthMode === 'custom' ? $customMaxWidth : 960,
             'itemGap' => $this->integer('itemGap', $salesChannelId, 16, 0, 80),
             'borderRadius' => $this->integer('borderRadius', $salesChannelId, 8, 0, 60),
+            'dividerColor' => $this->color('dividerColor', $salesChannelId, '#dee2e6'),
             'useItemBackground' => $this->boolean('useItemBackground', $salesChannelId, true),
             'itemBackgroundColor' => $this->color('itemBackgroundColor', $salesChannelId, '#f8f8f8'),
             'activeBackgroundColor' => match ($activeColorMode) {

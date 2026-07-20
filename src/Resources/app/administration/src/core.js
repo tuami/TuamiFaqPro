@@ -518,8 +518,8 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.0.0',
-    targetVersion: '1.0.0',
+    version: '1.1.0',
+    targetVersion: '1.1.0',
     snippets: {
         'de-DE': {
             'tuami-faq': {

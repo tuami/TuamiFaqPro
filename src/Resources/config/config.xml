@@ -12,10 +12,12 @@
     </card>
     <card>
         <title>Layout</title><title lang="de-DE">Layout</title>
+        <input-field type="single-select" cache-relevant="true"><name>layoutStyle</name><label>Display</label><label lang="de-DE">Darstellung</label><defaultValue>cards</defaultValue><options><option><id>cards</id><name>Cards</name><name lang="de-DE">Karten</name></option><option><id>dividers</id><name>Divider lines</name><name lang="de-DE">Trennlinien</name></option></options></input-field>
+        <input-field type="colorpicker" cache-relevant="true"><name>dividerColor</name><label>Divider line color</label><label lang="de-DE">Farbe der Trennlinien</label><helpText>Only used with divider lines.</helpText><helpText lang="de-DE">Wird nur bei der Darstellung mit Trennlinien verwendet.</helpText><defaultValue>#dee2e6</defaultValue></input-field>
         <input-field type="single-select" cache-relevant="true"><name>widthMode</name><label>Width</label><label lang="de-DE">Breite</label><defaultValue>standard</defaultValue><options><option><id>standard</id><name>Standard (960 px)</name><name lang="de-DE">Standard (960 px)</name></option><option><id>custom</id><name>Custom</name><name lang="de-DE">Manuell</name></option><option><id>full</id><name>Full width</name><name lang="de-DE">Volle Breite</name></option></options></input-field>
         <input-field type="int" cache-relevant="true"><name>customMaxWidth</name><label>Custom maximum width in pixels</label><label lang="de-DE">Manuelle maximale Breite in Pixeln</label><defaultValue>1200</defaultValue></input-field>
-        <input-field type="int" cache-relevant="true"><name>itemGap</name><label>Spacing between questions in pixels</label><label lang="de-DE">Abstand zwischen Fragen in Pixeln</label><defaultValue>16</defaultValue></input-field>
-        <input-field type="int" cache-relevant="true"><name>borderRadius</name><label>Corner radius in pixels</label><label lang="de-DE">Eckenradius in Pixeln</label><defaultValue>8</defaultValue></input-field>
+        <input-field type="int" cache-relevant="true"><name>itemGap</name><label>Spacing between questions in pixels</label><label lang="de-DE">Abstand zwischen Fragen in Pixeln</label><helpText>Not used with divider lines.</helpText><helpText lang="de-DE">Wird bei der Darstellung mit Trennlinien nicht verwendet.</helpText><defaultValue>16</defaultValue></input-field>
+        <input-field type="int" cache-relevant="true"><name>borderRadius</name><label>Corner radius in pixels</label><label lang="de-DE">Eckenradius in Pixeln</label><helpText>Only used for cards.</helpText><helpText lang="de-DE">Wird nur für die Darstellung als Karten verwendet.</helpText><defaultValue>8</defaultValue></input-field>
     </card>
     <card>
         <title>Colors</title><title lang="de-DE">Farben</title>

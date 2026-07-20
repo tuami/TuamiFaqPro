@@ -5,6 +5,7 @@
     --tuami-faq-gap: 16px;
     --tuami-faq-radius: 8px;
     --tuami-faq-max-width: 960px;
+    --tuami-faq-divider: var(--bs-border-color, #dee2e6);
     width: 100%;
     max-width: var(--tuami-faq-max-width);
     margin: 3rem auto;
@@ -24,5 +25,12 @@
     &__item[open] &__marker::after { transform: translateY(-50%) rotate(0deg); }
     &__answer { padding: 1.5rem; }
     &__answer > :last-child { margin-bottom: 0; }
+
+    &--layout-dividers &__items { gap: 0; }
+    &--layout-dividers &__item { border-radius: 0; background: transparent; overflow: visible; }
+    &--layout-dividers &__item { border-bottom: 1px solid var(--tuami-faq-divider); }
+    &--layout-dividers &__question,
+    &--layout-dividers &__answer { padding-inline: 1.5rem; }
 }
+
 .tuami-faq-pro-product, .tuami-faq-pro-detail { padding-block: 1rem; }

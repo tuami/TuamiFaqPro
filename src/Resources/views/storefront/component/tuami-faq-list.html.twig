@@ -3,8 +3,8 @@
 {% set faqTitleId = 'tuami-faq-pro-title-' ~ random() %}
 {% set faqStyle = faqData.style %}
 
-<section class="tuami-faq-pro tuami-faq-pro--width-{{ faqStyle.widthMode }}{% if not faqStyle.useItemBackground %} tuami-faq-pro--transparent{% endif %}"
-    style="--tuami-faq-max-width: {{ faqStyle.maxWidth }}px; --tuami-faq-gap: {{ faqStyle.itemGap }}px; --tuami-faq-radius: {{ faqStyle.borderRadius }}px; --tuami-faq-surface: {{ faqStyle.itemBackgroundColor }}; --tuami-faq-active: {{ faqStyle.activeBackgroundColor }}; --tuami-faq-active-text: {{ faqStyle.activeTextColor }};"
+<section class="tuami-faq-pro tuami-faq-pro--layout-{{ faqStyle.layoutStyle }} tuami-faq-pro--width-{{ faqStyle.widthMode }}{% if not faqStyle.useItemBackground %} tuami-faq-pro--transparent{% endif %}"
+    style="--tuami-faq-max-width: {{ faqStyle.maxWidth }}px; --tuami-faq-gap: {{ faqStyle.itemGap }}px; --tuami-faq-radius: {{ faqStyle.borderRadius }}px; --tuami-faq-divider: {{ faqStyle.dividerColor }}; --tuami-faq-surface: {{ faqStyle.itemBackgroundColor }}; --tuami-faq-active: {{ faqStyle.activeBackgroundColor }}; --tuami-faq-active-text: {{ faqStyle.activeTextColor }};"
     aria-labelledby="{{ faqTitleId }}">
     {% if faqHeadline %}<h2 id="{{ faqTitleId }}" class="tuami-faq-pro__title">{{ faqHeadline }}</h2>{% endif %}
     <div class="tuami-faq-pro__items">

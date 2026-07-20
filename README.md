@@ -22,6 +22,7 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 
 ### Layout
 
+- Darstellung als Karten oder als flache Liste mit individuell einstellbaren Trennlinien
 - Standardbreite von 960 Pixeln
 - frei einstellbare maximale Breite
 - volle verfügbare Breite

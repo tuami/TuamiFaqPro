@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- Zwei auswählbare FAQ-Darstellungen: Karten und Trennlinien
+- Trennlinien-Layout nach dem Vorbild einer flachen FAQ-Liste mit einstellbarer Linienfarbe
+- Bestehende Installationen verwenden weiterhin das Kartenlayout
+
 ## 1.0.0
 
 - Erste öffentliche Version
