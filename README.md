@@ -51,7 +51,7 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 
 ## Installation
 
-[TuamiFaqPro.zip herunterladen](https://github.com/tuami/TuamiFaqPro/raw/refs/heads/main/dist/TuamiFaqPro.zip)
+[TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
 1. Die heruntergeladene TuamiFaqPro.zip unter **Erweiterungen > Meine Erweiterungen** hochladen.
 2. Plugin installieren und aktivieren.
