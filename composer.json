@@ -1,6 +1,6 @@
 {
   "name": "tuami/faq-pro",
-  "description": "SEO-optimierte FAQ-Verwaltung von TUAMI für Shopware 6.7",
+  "description": "SEO-optimierte FAQ-Verwaltung für Shopware 6.7",
   "type": "shopware-platform-plugin",
   "license": "proprietary",
   "version": "1.0.0",

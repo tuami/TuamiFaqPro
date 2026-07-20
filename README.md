@@ -51,7 +51,9 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 
 ## Installation
 
-1. `TuamiFaqPro.zip` unter **Erweiterungen > Meine Erweiterungen** hochladen.
+[TuamiFaqPro.zip herunterladen](https://github.com/tuami/TuamiFaqPro/raw/refs/heads/main/dist/TuamiFaqPro.zip)
+
+1. Die heruntergeladene TuamiFaqPro.zip unter **Erweiterungen > Meine Erweiterungen** hochladen.
 2. Plugin installieren und aktivieren.
 3. Shopware-Cache leeren und die Administration neu laden.
 4. Das Storefront-Theme kompilieren.
@@ -74,4 +76,4 @@ Produkte, Kategorien, dynamische Produktgruppen und Schlüsselwörter innerhalb 
 
 TUAMI FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
 
-Es gilt die [TUAMI Community License 1.0](LICENSE). Diese ist eine Source-Available-Lizenz und keine OSI-anerkannte Open-Source-Lizenz.
+Es gilt die [Community License 1.0](LICENSE). Diese ist eine Source-Available-Lizenz und keine OSI-anerkannte Open-Source-Lizenz.
