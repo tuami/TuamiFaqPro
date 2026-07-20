@@ -1,0 +1,7 @@
+{% block element_tuami_faq %}
+    {% if element.data and element.data.items|length %}
+        {% sw_include '@TuamiFaqPro/storefront/component/tuami-faq-list.html.twig' with {
+            faqData: element.data
+        } only %}
+    {% endif %}
+{% endblock %}

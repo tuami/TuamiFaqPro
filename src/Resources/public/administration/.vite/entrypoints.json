@@ -1,0 +1,18 @@
+{
+  "base": "/bundles/tuamifaqpro/administration/",
+  "entryPoints": {
+    "tuami-faq-pro": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/tuamifaqpro/administration/assets/tuami-faq-pro-b93626cf.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": "7.1.0",
+  "viteServer": null
+}

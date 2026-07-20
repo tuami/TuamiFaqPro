@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false"/>
+
+        <service id="Tuami\FaqPro\Core\Content\Faq\FaqDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+        <service id="Tuami\FaqPro\Core\Content\Faq\Aggregate\FaqTranslation\FaqTranslationDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+        <service id="Tuami\FaqPro\Core\Content\FaqGroup\FaqGroupDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+        <service id="Tuami\FaqPro\Core\Content\FaqGroup\Aggregate\FaqGroupTranslation\FaqGroupTranslationDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+
+        <service id="Tuami\FaqPro\Storefront\FaqPresentationConfig"/>
+
+        <service id="Tuami\FaqPro\Storefront\FaqVisibilityService">
+            <argument type="service" id="Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder"/>
+            <argument type="service" id="product.repository"/>
+        </service>
+
+        <service id="Tuami\FaqPro\Storefront\Subscriber\ProductFaqSubscriber">
+            <argument type="service" id="tuami_faq.repository"/>
+        </service>
+
+        <service id="Tuami\FaqPro\Storefront\Subscriber\CategoryFaqSubscriber">
+            <argument type="service" id="tuami_faq.repository"/>
+        </service>
+
+        <service id="Tuami\FaqPro\Storefront\Cms\FaqCmsElementResolver">
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
+
+        <service id="Tuami\FaqPro\Storefront\Controller\FaqAiController" public="true">
+            <argument type="service" id="tuami_faq.repository"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="controller.service_arguments"/>
+        </service>
+    </services>
+</container>

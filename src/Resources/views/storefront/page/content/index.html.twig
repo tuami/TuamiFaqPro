@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/page/content/index.html.twig' %}
+
+{% block page_content %}
+    {{ parent() }}
+
+    {% if page.extensions.tuamiFaqPro and page.extensions.tuamiFaqPro.items|length %}
+        <div class="container tuami-faq-pro-category">
+            {% sw_include '@TuamiFaqPro/storefront/component/tuami-faq-list.html.twig' with {
+                faqData: page.extensions.tuamiFaqPro
+            } only %}
+        </div>
+    {% endif %}
+{% endblock %}

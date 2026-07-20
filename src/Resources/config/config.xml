@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/v6.7.12.1/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>General</title><title lang="de-DE">Allgemein</title>
+        <input-field type="bool" cache-relevant="true"><name>enabled</name><label>Enable FAQ output</label><label lang="de-DE">FAQ-Ausgabe aktivieren</label><defaultValue>true</defaultValue></input-field>
+        <input-field type="text" cache-relevant="true"><name>headline</name><label>Storefront headline</label><label lang="de-DE">Überschrift im Storefront</label><defaultValue>Häufig gestellte Fragen</defaultValue></input-field>
+        <input-field type="bool" cache-relevant="true"><name>showOnProductPages</name><label>Show assigned FAQ groups on product pages</label><label lang="de-DE">Zugeordnete FAQ-Gruppen auf Produktseiten anzeigen</label><defaultValue>true</defaultValue></input-field>
+        <input-field type="bool" cache-relevant="true"><name>showOnCategoryPages</name><label>Show assigned FAQ groups on category pages</label><label lang="de-DE">Zugeordnete FAQ-Gruppen auf Kategorieseiten anzeigen</label><defaultValue>true</defaultValue></input-field>
+        <input-field type="bool" cache-relevant="true"><name>enableJsonLd</name><label>Output FAQPage structured data</label><label lang="de-DE">FAQPage-Strukturdaten ausgeben</label><defaultValue>true</defaultValue></input-field>
+        <input-field type="bool" cache-relevant="true"><name>enableAiFeed</name><label>Enable /faq-ai.txt</label><label lang="de-DE">/faq-ai.txt aktivieren</label><defaultValue>true</defaultValue></input-field>
+    </card>
+    <card>
+        <title>Layout</title><title lang="de-DE">Layout</title>
+        <input-field type="single-select" cache-relevant="true"><name>widthMode</name><label>Width</label><label lang="de-DE">Breite</label><defaultValue>standard</defaultValue><options><option><id>standard</id><name>Standard (960 px)</name><name lang="de-DE">Standard (960 px)</name></option><option><id>custom</id><name>Custom</name><name lang="de-DE">Manuell</name></option><option><id>full</id><name>Full width</name><name lang="de-DE">Volle Breite</name></option></options></input-field>
+        <input-field type="int" cache-relevant="true"><name>customMaxWidth</name><label>Custom maximum width in pixels</label><label lang="de-DE">Manuelle maximale Breite in Pixeln</label><defaultValue>1200</defaultValue></input-field>
+        <input-field type="int" cache-relevant="true"><name>itemGap</name><label>Spacing between questions in pixels</label><label lang="de-DE">Abstand zwischen Fragen in Pixeln</label><defaultValue>16</defaultValue></input-field>
+        <input-field type="int" cache-relevant="true"><name>borderRadius</name><label>Corner radius in pixels</label><label lang="de-DE">Eckenradius in Pixeln</label><defaultValue>8</defaultValue></input-field>
+    </card>
+    <card>
+        <title>Colors</title><title lang="de-DE">Farben</title>
+        <input-field type="bool" cache-relevant="true"><name>useItemBackground</name><label>Use background color</label><label lang="de-DE">Hintergrundfarbe verwenden</label><defaultValue>true</defaultValue></input-field>
+        <input-field type="colorpicker" cache-relevant="true"><name>itemBackgroundColor</name><label>Question and answer background</label><label lang="de-DE">Hintergrund für Frage und Antwort</label><defaultValue>#f8f8f8</defaultValue></input-field>
+        <input-field type="single-select" cache-relevant="true"><name>activeColorMode</name><label>Active question color</label><label lang="de-DE">Farbe der geöffneten Frage</label><defaultValue>primary</defaultValue><options><option><id>primary</id><name>Bootstrap primary color</name><name lang="de-DE">Bootstrap-Primärfarbe</name></option><option><id>secondary</id><name>Bootstrap secondary color</name><name lang="de-DE">Bootstrap-Sekundärfarbe</name></option><option><id>custom</id><name>Custom color</name><name lang="de-DE">Eigene Farbe</name></option></options></input-field>
+        <input-field type="colorpicker" cache-relevant="true"><name>activeBackgroundColor</name><label>Custom active background color</label><label lang="de-DE">Eigene aktive Hintergrundfarbe</label><defaultValue>#0d6efd</defaultValue></input-field>
+        <input-field type="colorpicker" cache-relevant="true"><name>activeTextColor</name><label>Active text color</label><label lang="de-DE">Textfarbe der geöffneten Frage</label><defaultValue>#ffffff</defaultValue></input-field>
+        </card>
+    <card>
+        <title>Behavior</title><title lang="de-DE">Verhalten</title>
+        <input-field type="bool" cache-relevant="true"><name>openFirstItem</name><label>Open first question initially</label><label lang="de-DE">Erste Frage standardmäßig öffnen</label><defaultValue>true</defaultValue></input-field>
+    </card>
+</config>

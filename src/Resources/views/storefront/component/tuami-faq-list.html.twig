@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="{{ asset('bundles/tuamifaqpro/storefront/tuami-faq-pro.css') }}">
+{% set faqHeadline = faqData.headline %}
+{% set faqTitleId = 'tuami-faq-pro-title-' ~ random() %}
+{% set faqStyle = faqData.style %}
+
+<section class="tuami-faq-pro tuami-faq-pro--width-{{ faqStyle.widthMode }}{% if not faqStyle.useItemBackground %} tuami-faq-pro--transparent{% endif %}"
+    style="--tuami-faq-max-width: {{ faqStyle.maxWidth }}px; --tuami-faq-gap: {{ faqStyle.itemGap }}px; --tuami-faq-radius: {{ faqStyle.borderRadius }}px; --tuami-faq-surface: {{ faqStyle.itemBackgroundColor }}; --tuami-faq-active: {{ faqStyle.activeBackgroundColor }}; --tuami-faq-active-text: {{ faqStyle.activeTextColor }};"
+    aria-labelledby="{{ faqTitleId }}">
+    {% if faqHeadline %}<h2 id="{{ faqTitleId }}" class="tuami-faq-pro__title">{{ faqHeadline }}</h2>{% endif %}
+    <div class="tuami-faq-pro__items">
+        {% for faq in faqData.items %}
+            <details class="tuami-faq-pro__item"{% if loop.first and faqStyle.openFirstItem %} open{% endif %}>
+                <summary class="tuami-faq-pro__question"><span>{{ faq.question }}</span><span class="tuami-faq-pro__marker" aria-hidden="true"></span></summary>
+                <div class="tuami-faq-pro__answer">{{ faq.answer|sw_sanitize }}</div>
+            </details>
+        {% endfor %}
+    </div>
+    {% if faqData.enableJsonLd %}
+        {% set mainEntity = [] %}
+        {% for faq in faqData.items %}{% set mainEntity = mainEntity|merge([{'@type': 'Question','name': faq.question,'acceptedAnswer': {'@type': 'Answer','text': faq.answer|striptags}}]) %}{% endfor %}
+        {% set faqStructuredData = {'@context': 'https://schema.org','@type': 'FAQPage','mainEntity': mainEntity} %}
+        <script type="application/ld+json">{{ faqStructuredData|json_encode(jsonLdFlags)|raw }}</script>
+    {% endif %}
+</section>
