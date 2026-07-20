@@ -1,0 +1,38 @@
+name: Publish release 1.0.0
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish v1.0.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if gh release view v1.0.0 >/dev/null 2>&1; then
+            echo "Release v1.0.0 already exists."
+            exit 0
+          fi
+
+          gh release create v1.0.0 dist/TuamiFaqPro.zip \
+            --target "$GITHUB_SHA" \
+            --title "TUAMI FAQ Pro 1.0.0" \
+            --latest \
+            --notes "## Erste öffentliche Version
+
+          - Mehrsprachige FAQ-Gruppen und Fragen
+          - Ausgabe auf Produkt- und Kategorieseiten
+          - Zuordnung über Produkte, Kategorien, dynamische Produktgruppen und Schlüsselwörter
+          - Erlebniswelten-Element
+          - Verkaufskanal- und Rule-Builder-Einschränkungen
+          - Anpassbare Farben, Breiten, Abstände und Eckenradien
+          - JSON-LD und optionaler KI-Feed"
