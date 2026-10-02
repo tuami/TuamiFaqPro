@@ -1,6 +1,10 @@
+<img src="src/Resources/config/plugin.png" alt="TM FAQ Pro" width="64" height="64">
+
 # TM FAQ Pro
 
 FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Kategorieseiten und in Erlebniswelten.
+
+[Plugin-ZIP herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip) · [Änderungen](CHANGELOG.md)
 
 ## Funktionen
 
@@ -26,13 +30,14 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Standardbreite von 960 Pixeln
 - frei einstellbare maximale Breite
 - volle verfügbare Breite
-- Abstand zwischen den Fragen
+- Abstand zwischen den Karten
 - Eckenradius der FAQ-Karten
 
 ### Farben
 
 - Hintergrundfarbe für Fragen und Antworten ein- oder ausschalten
-- eigene Hintergrundfarbe
+- eigene Hintergrundfarbe für Karten
+- frei wählbare Farbe der Trennlinien
 - Farbe der geöffneten Frage aus der Bootstrap-Primärfarbe
 - Farbe der geöffneten Frage aus der Bootstrap-Sekundärfarbe
 - frei wählbare Farbe für die geöffnete Frage
@@ -55,9 +60,11 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
 1. Die heruntergeladene TuamiFaqPro.zip unter **Erweiterungen > Meine Erweiterungen** hochladen.
-2. Plugin installieren und aktivieren.
+2. Plugin installieren und aktivieren oder eine bestehende Installation aktualisieren.
 3. Shopware-Cache leeren und die Administration neu laden.
 4. Das Storefront-Theme kompilieren.
+
+Für die Installation die oben verlinkte Plugin-ZIP verwenden, nicht GitHubs „Source code“-Archiv. Der technische Pluginname bleibt `TuamiFaqPro`; beim Update auf TM FAQ Pro bleiben die bisherigen Daten und Einstellungen erhalten.
 
 ## Verwendung
 
@@ -73,10 +80,21 @@ Dynamische Produktgruppen gelten für Produktseiten. Für die automatische Ausga
 
 Kategoriezuordnungen gelten ausschließlich für die direkt ausgewählten Kategorieseiten, nicht für Unterkategorien oder deren Produkte. Auf Produktseiten werden bestimmte Produkte, dynamische Produktgruppen und Schlüsselwörter mit **ODER** verknüpft. Der Hauptschalter „FAQ-Ausgabe aktivieren“ gilt auch für die Erlebniswelten-Ausgabe.
 
+### Wo werden die FAQs angezeigt?
+
+| Zuordnung | Automatische Ausgabe |
+| --- | --- |
+| Kategorie | Nur auf der ausgewählten Kategorieseite, nicht auf Unterkategorien oder Artikeln |
+| Hauptprodukt | Auf dem Produkt und seinen Varianten |
+| Einzelne Variante | Nur auf dieser Variante |
+| Dynamische Produktgruppe | Auf passenden Produktseiten |
+| Produkt-Schlüsselwörter | Auf Produktseiten mit passendem Namen, Beschreibung oder Produktnummer |
+| Keine Zuordnung | Nur durch manuelle Platzierung in den Erlebniswelten |
+
+Mehrere Produktzuordnungen werden mit **ODER** verknüpft. Verkaufskanal, aktive Gruppe und eine gegebenenfalls hinterlegte Regel müssen ebenfalls passen.
+
 ## Lizenz
 
 TM FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
 
 Es gilt die [Community License 1.0](LICENSE). Diese ist eine Source-Available-Lizenz und keine OSI-anerkannte Open-Source-Lizenz.
-
-Die Zuordnung eines Hauptprodukts gilt auch für dessen Varianten. Wird nur eine einzelne Variante zugeordnet, gilt die Gruppe ausschließlich für diese Variante.
