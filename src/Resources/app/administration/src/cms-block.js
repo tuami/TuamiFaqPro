@@ -10,7 +10,7 @@ Component.register('sw-cms-block-tuami-faq', {
 Component.register('sw-cms-preview-tuami-faq', {
     template: `
         <div style="padding: 16px; background: #fff;">
-            <strong>{{ $t('tuami-faq.cms.label') }}</strong>
+            <strong style="display:flex;align-items:center;"><tm-faq-icon />{{ $t('tuami-faq.cms.label') }}</strong>
             <div style="margin-top: 12px; border-top: 1px solid #d1d9e0; padding: 8px 0;">Q + A</div>
             <div style="border-top: 1px solid #d1d9e0; padding-top: 8px;">Q + A</div>
         </div>`,
@@ -37,7 +37,7 @@ Shopware.Service('cmsService').registerCmsBlock({
 Locale.extend('de-DE', {
     'tuami-faq': {
         cms: {
-            label: 'FAQ Pro',
+            label: 'TM FAQ Pro',
         },
     },
 });
@@ -45,7 +45,7 @@ Locale.extend('de-DE', {
 Locale.extend('en-GB', {
     'tuami-faq': {
         cms: {
-            label: 'FAQ Pro',
+            label: 'TM FAQ Pro',
         },
     },
 });

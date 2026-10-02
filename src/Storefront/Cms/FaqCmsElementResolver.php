@@ -35,6 +35,10 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
 
     public function collect(CmsSlotEntity $slot, ResolverContext $resolverContext): ?CriteriaCollection
     {
+        if (!$this->isEnabled($resolverContext->getSalesChannelContext()->getSalesChannelId())) {
+            return null;
+        }
+
         $groupId = $slot->getFieldConfig()->get('groupId')?->getStringValue();
 
         if ($groupId === null || $groupId === '') {
@@ -58,6 +62,10 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
     {
         $salesChannelContext = $resolverContext->getSalesChannelContext();
         $salesChannelId = $salesChannelContext->getSalesChannelId();
+        if (!$this->isEnabled($salesChannelId)) {
+            $slot->setData(new ArrayStruct(['items' => []], 'tuami_faq_cms_data'));
+            return;
+        }
         $headline = \trim((string) ($slot->getFieldConfig()->get('headline')?->getStringValue() ?? ''));
         if ($headline === '') {
             $headline = $this->presentationConfig->headline($salesChannelId);
@@ -84,6 +92,13 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
             'style' => $this->presentationConfig->style($salesChannelId),
             'enableJsonLd' => $this->systemConfigService->getBool('TuamiFaqPro.config.enableJsonLd', $salesChannelId),
         ], 'tuami_faq_cms_data'));
+    }
+
+    private function isEnabled(string $salesChannelId): bool
+    {
+        $value = $this->systemConfigService->get('TuamiFaqPro.config.enabled', $salesChannelId);
+
+        return $value === null || (bool) $value;
     }
 
     private function resultKey(CmsSlotEntity $slot): string

@@ -1,4 +1,7 @@
 (function(){
+Shopware.Component.register('tm-faq-icon', { template: `<span aria-hidden="true" style="display:inline-flex;width:40px;height:40px;flex:0 0 40px;vertical-align:middle;margin-right:10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="10" fill="#0878f9"/><path d="M58 59h43v35H88l-13 12V94H58z" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><path d="M25 24h62v48H48L31 87V72h-6z" fill="#0878f9" stroke="#fff" stroke-width="6" stroke-linejoin="round"/><path d="M47 41c0-12 21-12 21 0 0 7-11 7-11 15" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="57" cy="64" r="3" fill="#fff"/></svg></span>` });
+})();
+(function(){
 const { Component, Module, Mixin, Context } = Shopware;
 const { Criteria } = Shopware.Data;
 
@@ -240,7 +243,7 @@ function createListComponent(entityName, template, columnsFactory, association) 
                             ? `${this.$t('tuami-faq.general.loadError')} ${detail}`
                             : this.$t('tuami-faq.general.loadError'),
                     });
-                    console.error('[TUAMI FAQ Pro] FAQ list loading failed', error);
+                    console.error('[TM FAQ Pro] FAQ list loading failed', error);
                 } finally {
                     this.isLoading = false;
                 }
@@ -424,7 +427,7 @@ Component.register('tuami-faq-group-detail', createDetailComponent(
 Component.register('sw-cms-el-tuami-faq', {
     template: `
         <div class="sw-cms-el-tuami-faq">
-            <h3>{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
+            <h3 style="display:flex;align-items:center;"><tm-faq-icon />{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionOne') }}</div>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionTwo') }}</div>
         </div>`,
@@ -437,7 +440,7 @@ Component.register('sw-cms-el-tuami-faq', {
 Component.register('sw-cms-el-preview-tuami-faq', {
     template: `
         <div style="padding: 16px; background: #fff;">
-            <strong>{{ $t('tuami-faq.cms.label') }}</strong>
+            <strong style="display:flex;align-items:center;"><tm-faq-icon />{{ $t('tuami-faq.cms.label') }}</strong>
             <div style="margin-top: 12px; border-top: 1px solid #d1d9e0; padding-top: 8px;">Q + A</div>
         </div>`,
 });
@@ -519,13 +522,13 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.0',
-    targetVersion: '1.1.0',
+    version: '1.1.2',
+    targetVersion: '1.1.2',
     snippets: {
         'de-DE': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'FAQ Pro',
+                    mainMenuItem: 'TM FAQ Pro',
                     description: 'FAQs zentral verwalten und gezielt ausspielen',
                     faqs: 'FAQs',
                     groups: 'Gruppen',
@@ -564,8 +567,8 @@ Module.register('tuami-faq', {
                     active: 'Aktiv',
                     position: 'Position',
                     assignmentHelp: 'Ohne Zuordnung wird die FAQ überall angezeigt. Mehrere Kriterien werden mit ODER verknüpft.',
-                    products: 'Bestimmte Produkte',
-                    categories: 'Produktkategorien',
+                    products: 'Produkte (Hauptprodukt inkl. Varianten)',
+                    categories: 'Kategorieseiten',
                     keywords: 'Produkt-Schlüsselwörter',
                     keywordsHelp: 'Komma-, Semikolon- oder zeilengetrennt; Abgleich mit Produktname, Beschreibung und Produktnummer.',
                     slug: 'URL-Slug',
@@ -584,7 +587,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leer lassen, um die Gruppe in allen Verkaufskanälen zu verwenden.',
                 },
                 cms: {
-                    label: 'FAQ Pro',
+                    label: 'TM FAQ Pro',
                     group: 'FAQ-Gruppe',
                     headline: 'Überschrift',
                     previewQuestionOne: 'Wie funktioniert dieses Produkt?',
@@ -595,7 +598,7 @@ Module.register('tuami-faq', {
         'en-GB': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'FAQ Pro',
+                    mainMenuItem: 'TM FAQ Pro',
                     description: 'Manage and display FAQs centrally',
                     faqs: 'FAQs',
                     groups: 'Groups',
@@ -634,8 +637,8 @@ Module.register('tuami-faq', {
                     active: 'Active',
                     position: 'Position',
                     assignmentHelp: 'With no assignment, the FAQ is shown everywhere. Multiple criteria are combined with OR.',
-                    products: 'Specific products',
-                    categories: 'Product categories',
+                    products: 'Products (parent includes variants)',
+                    categories: 'Category pages',
                     keywords: 'Product keywords',
                     keywordsHelp: 'Separate by commas, semicolons or new lines; matched against product name, description and product number.',
                     slug: 'URL slug',
@@ -654,7 +657,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leave empty to use the group in every sales channel.',
                 },
                 cms: {
-                    label: 'FAQ Pro',
+                    label: 'TM FAQ Pro',
                     group: 'FAQ group',
                     headline: 'Headline',
                     previewQuestionOne: 'How does this product work?',
@@ -772,10 +775,10 @@ Component.override('tuami-faq-group-detail', {
 Locale.extend('de-DE', {
     'tuami-faq': { groupDetail: {
         assignmentCard: 'Zuordnung zu Produkten und Kategorien',
-        assignmentHelp: 'Die Gruppe wird nur angezeigt, wenn mindestens eine Zuordnung passt. Produkte, Kategorien, dynamische Produktgruppen und Schlüsselwörter werden mit ODER verknüpft.',
-        products: 'Bestimmte Produkte',
+        assignmentHelp: 'Kategorien gelten nur für die ausgewählten Kategorieseiten, nicht für Unterkategorien oder Produkte. Auf Produktseiten gelten Produkte, dynamische Produktgruppen und Schlüsselwörter mit ODER. Ohne Zuordnung erfolgt die Ausgabe nur über Erlebniswelten.',
+        products: 'Produkte (Hauptprodukt inkl. Varianten)',
         productStreams: 'Dynamische Produktgruppen',
-        categories: 'Produktkategorien',
+        categories: 'Kategorieseiten',
         keywords: 'Produkt-Schlüsselwörter',
         keywordsHelp: 'Komma-, Semikolon- oder zeilengetrennt. Der Abgleich erfolgt mit Produktname, Beschreibung und Produktnummer.',
         availabilityCard: 'Verkaufskanal und Regeln',
@@ -787,10 +790,10 @@ Locale.extend('de-DE', {
 Locale.extend('en-GB', {
     'tuami-faq': { groupDetail: {
         assignmentCard: 'Product and category assignment',
-        assignmentHelp: 'The group is only displayed when at least one assignment matches. Products, categories, dynamic product groups and keywords are combined with OR.',
-        products: 'Specific products',
+        assignmentHelp: 'Categories apply only to the selected category pages, not to subcategories or products. Product pages match products, dynamic product groups or keywords. Groups without assignments are only displayed through Shopping Experiences.',
+        products: 'Products (parent includes variants)',
         productStreams: 'Dynamic product groups',
-        categories: 'Product categories',
+        categories: 'Category pages',
         keywords: 'Product keywords',
         keywordsHelp: 'Separate with commas, semicolons or new lines. Matching uses the product name, description and product number.',
         availabilityCard: 'Sales channel and rules',
@@ -817,7 +820,7 @@ Component.register('sw-cms-block-tuami-faq', {
 Component.register('sw-cms-preview-tuami-faq', {
     template: `
         <div style="padding: 16px; background: #fff;">
-            <strong>{{ $t('tuami-faq.cms.label') }}</strong>
+            <strong style="display:flex;align-items:center;"><tm-faq-icon />{{ $t('tuami-faq.cms.label') }}</strong>
             <div style="margin-top: 12px; border-top: 1px solid #d1d9e0; padding: 8px 0;">Q + A</div>
             <div style="border-top: 1px solid #d1d9e0; padding-top: 8px;">Q + A</div>
         </div>`,
@@ -844,7 +847,7 @@ Shopware.Service('cmsService').registerCmsBlock({
 Locale.extend('de-DE', {
     'tuami-faq': {
         cms: {
-            label: 'FAQ Pro',
+            label: 'TM FAQ Pro',
         },
     },
 });
@@ -852,7 +855,7 @@ Locale.extend('de-DE', {
 Locale.extend('en-GB', {
     'tuami-faq': {
         cms: {
-            label: 'FAQ Pro',
+            label: 'TM FAQ Pro',
         },
     },
 });

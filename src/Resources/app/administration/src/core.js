@@ -239,7 +239,7 @@ function createListComponent(entityName, template, columnsFactory, association) 
                             ? `${this.$t('tuami-faq.general.loadError')} ${detail}`
                             : this.$t('tuami-faq.general.loadError'),
                     });
-                    console.error('[TUAMI FAQ Pro] FAQ list loading failed', error);
+                    console.error('[TM FAQ Pro] FAQ list loading failed', error);
                 } finally {
                     this.isLoading = false;
                 }
@@ -423,7 +423,7 @@ Component.register('tuami-faq-group-detail', createDetailComponent(
 Component.register('sw-cms-el-tuami-faq', {
     template: `
         <div class="sw-cms-el-tuami-faq">
-            <h3>{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
+            <h3 style="display:flex;align-items:center;"><tm-faq-icon />{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionOne') }}</div>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionTwo') }}</div>
         </div>`,
@@ -436,7 +436,7 @@ Component.register('sw-cms-el-tuami-faq', {
 Component.register('sw-cms-el-preview-tuami-faq', {
     template: `
         <div style="padding: 16px; background: #fff;">
-            <strong>{{ $t('tuami-faq.cms.label') }}</strong>
+            <strong style="display:flex;align-items:center;"><tm-faq-icon />{{ $t('tuami-faq.cms.label') }}</strong>
             <div style="margin-top: 12px; border-top: 1px solid #d1d9e0; padding-top: 8px;">Q + A</div>
         </div>`,
 });
@@ -518,13 +518,13 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.0',
-    targetVersion: '1.1.0',
+    version: '1.1.2',
+    targetVersion: '1.1.2',
     snippets: {
         'de-DE': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'FAQ Pro',
+                    mainMenuItem: 'TM FAQ Pro',
                     description: 'FAQs zentral verwalten und gezielt ausspielen',
                     faqs: 'FAQs',
                     groups: 'Gruppen',
@@ -563,8 +563,8 @@ Module.register('tuami-faq', {
                     active: 'Aktiv',
                     position: 'Position',
                     assignmentHelp: 'Ohne Zuordnung wird die FAQ überall angezeigt. Mehrere Kriterien werden mit ODER verknüpft.',
-                    products: 'Bestimmte Produkte',
-                    categories: 'Produktkategorien',
+                    products: 'Produkte (Hauptprodukt inkl. Varianten)',
+                    categories: 'Kategorieseiten',
                     keywords: 'Produkt-Schlüsselwörter',
                     keywordsHelp: 'Komma-, Semikolon- oder zeilengetrennt; Abgleich mit Produktname, Beschreibung und Produktnummer.',
                     slug: 'URL-Slug',
@@ -583,7 +583,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leer lassen, um die Gruppe in allen Verkaufskanälen zu verwenden.',
                 },
                 cms: {
-                    label: 'FAQ Pro',
+                    label: 'TM FAQ Pro',
                     group: 'FAQ-Gruppe',
                     headline: 'Überschrift',
                     previewQuestionOne: 'Wie funktioniert dieses Produkt?',
@@ -594,7 +594,7 @@ Module.register('tuami-faq', {
         'en-GB': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'FAQ Pro',
+                    mainMenuItem: 'TM FAQ Pro',
                     description: 'Manage and display FAQs centrally',
                     faqs: 'FAQs',
                     groups: 'Groups',
@@ -633,8 +633,8 @@ Module.register('tuami-faq', {
                     active: 'Active',
                     position: 'Position',
                     assignmentHelp: 'With no assignment, the FAQ is shown everywhere. Multiple criteria are combined with OR.',
-                    products: 'Specific products',
-                    categories: 'Product categories',
+                    products: 'Products (parent includes variants)',
+                    categories: 'Category pages',
                     keywords: 'Product keywords',
                     keywordsHelp: 'Separate by commas, semicolons or new lines; matched against product name, description and product number.',
                     slug: 'URL slug',
@@ -653,7 +653,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leave empty to use the group in every sales channel.',
                 },
                 cms: {
-                    label: 'FAQ Pro',
+                    label: 'TM FAQ Pro',
                     group: 'FAQ group',
                     headline: 'Headline',
                     previewQuestionOne: 'How does this product work?',
@@ -711,4 +711,5 @@ Module.register('tuami-faq', {
         privilege: 'tuami_faq.viewer',
     },
 });
+
 

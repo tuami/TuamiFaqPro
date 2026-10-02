@@ -44,17 +44,18 @@ final class FaqVisibilityService
         }
 
         $productIds = $group->getProductIds() ?? [];
-        $categoryIds = $group->getCategoryIds() ?? [];
+
         $productStreamIds = $group->getProductStreamIds() ?? [];
         $keywords = $this->keywords($group->getKeywords());
 
-        // Eine Gruppe ohne Seitenzuordnung wird bewusst nirgends automatisch eingeblendet.
-        if ($productIds === [] && $categoryIds === [] && $productStreamIds === [] && $keywords === []) {
+        // Category assignments apply only to category pages, never to products.
+        if ($productIds === [] && $productStreamIds === [] && $keywords === []) {
             return false;
         }
 
+        // Assigning a parent product includes its variants; assigning a variant stays specific.
         if (\in_array($product->getId(), $productIds, true)
-            || \array_intersect($product->getCategoryTree() ?? [], $categoryIds) !== []
+            || ($product->getParentId() !== null && \in_array($product->getParentId(), $productIds, true))
             || \array_intersect($matchingProductStreamIds, $productStreamIds) !== []) {
             return true;
         }
@@ -78,11 +79,9 @@ final class FaqVisibilityService
         return false;
     }
 
-    /** @param list<string> $categoryIds */
-    public function matchesCategory(FaqEntity $faq, array $categoryIds): bool
+    public function matchesCategory(FaqEntity $faq, string $categoryId): bool
     {
-        $assignedCategoryIds = $faq->getGroup()?->getCategoryIds() ?? [];
-        return $assignedCategoryIds !== [] && \array_intersect($categoryIds, $assignedCategoryIds) !== [];
+        return \in_array($categoryId, $faq->getGroup()?->getCategoryIds() ?? [], true);
     }
 
     /**

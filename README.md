@@ -1,4 +1,4 @@
-# TUAMI FAQ Pro
+# TM FAQ Pro
 
 FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Kategorieseiten und in Erlebniswelten.
 
@@ -8,7 +8,7 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Automatische Ausgabe auf zugeordneten Produkt- und Kategorieseiten
 - Zuordnung über einzelne Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter
 - Einschränkung nach Verkaufskanal und Rule-Builder-Regel
-- Manuelle Platzierung über das Erlebniswelten-Element **FAQ Pro**
+- Manuelle Platzierung über das Erlebniswelten-Element **TM FAQ Pro**
 - Eigene Überschrift pro Erlebniswelten-Element
 - Sortierung von Gruppen und Fragen
 - Aktivieren und Deaktivieren einzelner Gruppen und Fragen
@@ -61,20 +61,22 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 
 ## Verwendung
 
-1. Unter **Kataloge > FAQ Pro > Gruppen** eine Gruppe anlegen.
+1. Unter **Kataloge > TM FAQ Pro > Gruppen** eine Gruppe anlegen.
 2. Der Gruppe Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter zuweisen.
 3. Unter **FAQs** Fragen und Antworten anlegen und einer Gruppe zuordnen.
 4. Optional Verkaufskanäle und eine Rule-Builder-Regel festlegen.
 5. Darstellung und Verhalten in der Plugin-Konfiguration einstellen.
 
-Eine Gruppe wird auf Produkt- oder Kategorieseiten nur automatisch angezeigt, wenn eine passende Zuordnung vorhanden ist. Gruppen ohne Zuordnung können weiterhin über das Erlebniswelten-Element **FAQ Pro** ausgegeben werden.
+Eine Gruppe wird auf Produkt- oder Kategorieseiten nur automatisch angezeigt, wenn eine passende Zuordnung vorhanden ist. Gruppen ohne Zuordnung können weiterhin über das Erlebniswelten-Element **TM FAQ Pro** ausgegeben werden.
 
 Dynamische Produktgruppen gelten für Produktseiten. Für die automatische Ausgabe auf Kategorieseiten muss die Kategorie direkt in der FAQ-Gruppe ausgewählt werden.
 
-Produkte, Kategorien, dynamische Produktgruppen und Schlüsselwörter innerhalb einer Gruppe werden mit **ODER** verknüpft. Das Produkt muss daher nur eine der Zuordnungen erfüllen.
+Kategoriezuordnungen gelten ausschließlich für die direkt ausgewählten Kategorieseiten, nicht für Unterkategorien oder deren Produkte. Auf Produktseiten werden bestimmte Produkte, dynamische Produktgruppen und Schlüsselwörter mit **ODER** verknüpft. Der Hauptschalter „FAQ-Ausgabe aktivieren“ gilt auch für die Erlebniswelten-Ausgabe.
 
 ## Lizenz
 
-TUAMI FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
+TM FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
 
 Es gilt die [Community License 1.0](LICENSE). Diese ist eine Source-Available-Lizenz und keine OSI-anerkannte Open-Source-Lizenz.
+
+Die Zuordnung eines Hauptprodukts gilt auch für dessen Varianten. Wird nur eine einzelne Variante zugeordnet, gilt die Gruppe ausschließlich für diese Variante.

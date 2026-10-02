@@ -53,10 +53,10 @@ Component.override('tuami-faq-group-detail', {
 Locale.extend('de-DE', {
     'tuami-faq': { groupDetail: {
         assignmentCard: 'Zuordnung zu Produkten und Kategorien',
-        assignmentHelp: 'Die Gruppe wird nur angezeigt, wenn mindestens eine Zuordnung passt. Produkte, Kategorien, dynamische Produktgruppen und Schlüsselwörter werden mit ODER verknüpft.',
-        products: 'Bestimmte Produkte',
+        assignmentHelp: 'Kategorien gelten nur für die ausgewählten Kategorieseiten, nicht für Unterkategorien oder Produkte. Auf Produktseiten gelten Produkte, dynamische Produktgruppen und Schlüsselwörter mit ODER. Ohne Zuordnung erfolgt die Ausgabe nur über Erlebniswelten.',
+        products: 'Produkte (Hauptprodukt inkl. Varianten)',
         productStreams: 'Dynamische Produktgruppen',
-        categories: 'Produktkategorien',
+        categories: 'Kategorieseiten',
         keywords: 'Produkt-Schlüsselwörter',
         keywordsHelp: 'Komma-, Semikolon- oder zeilengetrennt. Der Abgleich erfolgt mit Produktname, Beschreibung und Produktnummer.',
         availabilityCard: 'Verkaufskanal und Regeln',
@@ -68,10 +68,10 @@ Locale.extend('de-DE', {
 Locale.extend('en-GB', {
     'tuami-faq': { groupDetail: {
         assignmentCard: 'Product and category assignment',
-        assignmentHelp: 'The group is only displayed when at least one assignment matches. Products, categories, dynamic product groups and keywords are combined with OR.',
-        products: 'Specific products',
+        assignmentHelp: 'Categories apply only to the selected category pages, not to subcategories or products. Product pages match products, dynamic product groups or keywords. Groups without assignments are only displayed through Shopping Experiences.',
+        products: 'Products (parent includes variants)',
         productStreams: 'Dynamic product groups',
-        categories: 'Product categories',
+        categories: 'Category pages',
         keywords: 'Product keywords',
         keywordsHelp: 'Separate with commas, semicolons or new lines. Matching uses the product name, description and product number.',
         availabilityCard: 'Sales channel and rules',

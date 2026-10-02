@@ -58,7 +58,7 @@ final class CategoryFaqSubscriber implements EventSubscriberInterface
                 $salesChannelId,
                 $salesChannelContext->getRuleIds()
             )
-                && $this->visibilityService->matchesCategory($faq, $this->categoryIds($category->getId(), $category->getPath()))
+                && $this->visibilityService->matchesCategory($faq, $category->getId())
                 && $faq->getQuestion() !== null
                 && $faq->getAnswer() !== null
         ));
@@ -81,11 +81,5 @@ final class CategoryFaqSubscriber implements EventSubscriberInterface
         return $value === null || (bool) $value;
     }
 
-    /** @return list<string> */
-    private function categoryIds(string $categoryId, ?string $path): array
-    {
-        $parentIds = $path === null ? [] : \array_filter(\explode('|', \trim($path, '|')));
 
-        return \array_values(\array_unique([...$parentIds, $categoryId]));
-    }
 }
