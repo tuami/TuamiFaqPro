@@ -5,6 +5,7 @@ namespace Tuami\FaqPro\Storefront;
 use Tuami\FaqPro\Core\Content\Faq\FaqEntity;
 use Tuami\FaqPro\Core\Content\FaqGroup\FaqGroupEntity;
 use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Content\ProductStream\Service\AbstractProductStreamBuilder;
 use Shopware\Core\Content\ProductStream\Service\ProductStreamBuilderInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,7 +14,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 final class FaqVisibilityService
 {
     public function __construct(
-        private readonly ProductStreamBuilderInterface $productStreamBuilder,
+        private readonly AbstractProductStreamBuilder|ProductStreamBuilderInterface $productStreamBuilder,
         private readonly EntityRepository $productRepository
     ) {
     }
@@ -94,7 +95,12 @@ final class FaqVisibilityService
         foreach (\array_values(\array_unique($productStreamIds)) as $productStreamId) {
             try {
                 $criteria = new Criteria([$productId]);
-                $criteria->addFilter(...$this->productStreamBuilder->buildFilters($productStreamId, $context));
+                if ($this->productStreamBuilder instanceof AbstractProductStreamBuilder) {
+                    $this->productStreamBuilder->enrichCriteria($criteria, $productStreamId, $context);
+                } else {
+                    // Compatibility with Shopware versions before 6.7.13.
+                    $criteria->addFilter(...$this->productStreamBuilder->buildFilters($productStreamId, $context));
+                }
                 if ($this->productRepository->searchIds($criteria, $context)->getTotal() > 0) {
                     $matches[] = $productStreamId;
                 }

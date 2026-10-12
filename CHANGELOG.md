@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.3
+
+- Anpassungen anhand der Shopware-Änderungen bis 6.7.15.1
+- Dynamische Produktgruppen verwenden ab Shopware 6.7.13 die neue enrichCriteria-Schnittstelle; ältere 6.7-Versionen behalten den bisherigen Aufruf
+- Dienste und Routen auf PHP-Konfiguration umgestellt, um die XML-Abkündigung zu berücksichtigen
+- JSON-LD verwendet lokal definierte Kodierungsoptionen und funktioniert auch bei strengem Twig-Variablencheck
+- Keine Änderung an bestehenden FAQ-Zuordnungen oder Datenbanktabellen
+- Lokale Regressionstests erweitert; ein vollständiger Shopware-Integrationstest ist vor dem Live-Update erforderlich
+
 ## 1.1.2
 
 - Produktzuordnung berücksichtigt das Hauptprodukt einer Variante

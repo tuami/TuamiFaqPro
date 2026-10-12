@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/v6.7.12.1/src/Core/System/SystemConfig/Schema/config.xsd">
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/v6.7.15.1/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
         <title>General</title><title lang="de-DE">Allgemein</title>
         <input-field type="bool" cache-relevant="true"><name>enabled</name><label>Enable FAQ output</label><label lang="de-DE">FAQ-Ausgabe aktivieren</label><defaultValue>true</defaultValue></input-field>

@@ -55,6 +55,8 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
+Version 1.1.3 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Quellcode-Abgleich und isolierte Regressionstests ersetzen keinen Test in einer vollständigen Shopware-Installation. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
+
 ## Installation
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)

@@ -16,6 +16,7 @@
         {% endfor %}
     </div>
     {% if faqData.enableJsonLd %}
+        {% set jsonLdFlags = constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP') b-or constant('JSON_HEX_APOS') b-or constant('JSON_HEX_QUOT') %}
         {% set mainEntity = [] %}
         {% for faq in faqData.items %}{% set mainEntity = mainEntity|merge([{'@type': 'Question','name': faq.question,'acceptedAnswer': {'@type': 'Answer','text': faq.answer|striptags}}]) %}{% endfor %}
         {% set faqStructuredData = {'@context': 'https://schema.org','@type': 'FAQPage','mainEntity': mainEntity} %}

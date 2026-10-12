@@ -3,7 +3,16 @@
 namespace Shopware\Core\Framework\DataAbstractionLayer {
  class Entity {}
  trait EntityIdTrait { protected string $id; public function getId(): string{return $this->id;} public function setId(string $id): void{$this->id=$id;} }
- class EntityRepository {}
+ class EntityRepository {
+  public array $queries=[];
+  public function searchIds($criteria,$context): object {
+   $this->queries[]=$criteria;
+   return new class($criteria->filters) {
+    public function __construct(private array $filters){}
+    public function getTotal(): int {return in_array('match',$this->filters,true) ? 1 : 0;}
+   };
+  }
+ }
 }
 namespace Shopware\Core\Content\Product {
  class ProductEntity {
@@ -16,9 +25,21 @@ namespace Shopware\Core\Content\Product {
   public function getProductNumber(): string {return 'SW10000.16';}
  }
 }
-namespace Shopware\Core\Content\ProductStream\Service { interface ProductStreamBuilderInterface {} }
+namespace Shopware\Core\Framework { class Context {} }
+namespace Shopware\Core\Content\ProductStream\Service {
+ interface ProductStreamBuilderInterface {}
+ abstract class AbstractProductStreamBuilder {
+  abstract public function enrichCriteria(\Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria $criteria,string $id,\Shopware\Core\Framework\Context $context): void;
+ }
+}
 namespace Shopware\Core\Framework\DataAbstractionLayer\Search {
- class Criteria { public array $filters=[]; public function addAssociation($v): void{} public function addFilter($v): void{$this->filters[]=$v;} public function addSorting($v): void{} }
+ class Criteria {
+  public array $filters=[];
+  public function __construct(public array $ids=[]){}
+  public function addAssociation($v): void{}
+  public function addFilter(...$values): void{array_push($this->filters,...$values);}
+  public function addSorting($v): void{}
+ }
 }
 namespace Shopware\Core\Framework\DataAbstractionLayer\Search\Filter { class EqualsFilter { public function __construct(public string $field,public mixed $value){} } }
 namespace Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting { class FieldSorting { public function __construct($v){} } }
@@ -110,5 +131,30 @@ namespace {
  check($cms->collect($slot,$context)===null,'channel disable overrides global enable');
  $config->values=[];
  check($cms->collect($slot,$context)!==null,'missing config uses default enabled');
+
+ $modernBuilder=new class extends \Shopware\Core\Content\ProductStream\Service\AbstractProductStreamBuilder implements \Shopware\Core\Content\ProductStream\Service\ProductStreamBuilderInterface {
+  public array $calls=[];
+  public int $legacyCalls=0;
+  public function enrichCriteria(\Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria $criteria,string $id,\Shopware\Core\Framework\Context $context): void {
+   $this->calls[]=$id;
+   if($id==='deleted' || $id==='empty'){throw new \RuntimeException('Invalid or empty product stream');}
+   $criteria->addFilter($id==='stream-a' ? 'match' : 'no-match');
+  }
+  public function buildFilters($id,$context): array {++$this->legacyCalls;throw new \RuntimeException('Deprecated API must not be called');}
+ };
+ $repository=new \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository();
+ $modernService=new \Tuami\FaqPro\Storefront\FaqVisibilityService($modernBuilder,$repository);
+ $dalContext=new \Shopware\Core\Framework\Context();
+ check($modernService->matchingProductStreamIds(['stream-a','stream-a','stream-b','deleted','empty'],'variant-a',$dalContext)===['stream-a'],'modern builder matches, deduplicates and excludes invalid streams');
+ check($modernBuilder->legacyCalls===0,'modern builder never calls deprecated buildFilters');
+ check($modernBuilder->calls===['stream-a','stream-b','deleted','empty'],'each stream evaluated once');
+ check(count($repository->queries)===2,'invalid and empty streams never cause unfiltered product search');
+ check($repository->queries[0]->ids===['variant-a'],'stream criteria stay restricted to displayed variant');
+ check($modernService->matchingProductStreamIds([],'variant-a',$dalContext)===[],'no streams means no matches');
+ $legacyBuilder=new class implements \Shopware\Core\Content\ProductStream\Service\ProductStreamBuilderInterface {
+  public function buildFilters($id,$context): array {return [$id==='stream-a' ? 'match' : 'no-match'];}
+ };
+ $legacyService=new \Tuami\FaqPro\Storefront\FaqVisibilityService($legacyBuilder,new \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository());
+ check($legacyService->matchingProductStreamIds(['stream-a','stream-b'],'product-a',$dalContext)===['stream-a'],'older Shopware 6.7 builder remains supported');
  echo "$count checks passed\n";
 }

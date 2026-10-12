@@ -522,8 +522,8 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.2',
-    targetVersion: '1.1.2',
+    version: '1.1.3',
+    targetVersion: '1.1.3',
     snippets: {
         'de-DE': {
             'tuami-faq': {
@@ -715,7 +715,6 @@ Module.register('tuami-faq', {
         privilege: 'tuami_faq.viewer',
     },
 });
-
 
 
 })();
