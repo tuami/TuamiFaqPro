@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.7 – 14.10.2026
+
+- Eigene, beschriftete FAQ-Suche direkt neben dem Gruppenfilter; globale Shopware-Suche bleibt getrennt
+- Suche in Fragen und Antworten mit kurzer Tipppause oder sofort per Enter
+- Such- und Filterfelder umbrechen auf schmalen Ansichten
+- Aktionsbuttons in FAQ- und Gruppenverwaltung auf Shopwares Größe „large“ (48 Pixel) angehoben
+
 ## 1.1.6 – 14.10.2026
 
 - Serverseitiger Gruppenfilter in der FAQ-Liste, kombinierbar mit Suche und Seitennavigation; Schutz vor veralteten Antworten bei schnellem Wechsel

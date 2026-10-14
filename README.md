@@ -22,7 +22,11 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Barrierearm bedienbare FAQ-Akkordeons
 - Sanfte Auf-/Zuklapp- und Plus-/Minus-Animation ohne zusätzliches JavaScript, mit Rücksicht auf reduzierte Bewegung
 
-### Neu in 1.1.6
+### Neu in 1.1.7
+
+Eine eigene **FAQ-Suche** steht direkt neben dem Gruppenfilter und durchsucht Fragen und Antworten. Sie reagiert nach kurzer Tipppause oder sofort mit Enter. Auf schmalen Ansichten stehen die Felder untereinander. Die Aktionsbuttons in FAQ- und Gruppenverwaltung sind jetzt mit Shopwares Größe „large“ deutlich größer.
+
+### Seit 1.1.6
 
 Der Anzeigename lautet jetzt **FAQ Pro**. Unter **Kataloge → FAQ Pro** führen die Unterpunkte **FAQs** und **Gruppen** direkt zur jeweiligen Verwaltung mit Anlege-Schaltfläche. Größere Icons erleichtern die Orientierung; Änderungsdaten werden lesbar formatiert. Der neue Gruppenfilter grenzt die FAQ-Liste ein und lässt sich mit der Suche kombinieren.
 
@@ -67,11 +71,11 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
-Version 1.1.6 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
+Version 1.1.7 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
 
 ## Installation
 
-Aktuelle Version: **1.1.6**.
+Aktuelle Version: **1.1.7**.
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
@@ -85,6 +89,8 @@ Für die Installation die oben verlinkte Plugin-ZIP verwenden, nicht GitHubs „
 ## Verwendung
 
 In der FAQ-Liste lässt sich über **FAQ-Gruppe** gezielt eine Gruppe auswählen. Die Suche gilt dann innerhalb dieser Gruppe. Über das Löschen der Auswahl werden wieder **Alle Gruppen** angezeigt. Beim Filterwechsel beginnt die Liste auf Seite 1; inaktive Gruppen bleiben zur Verwaltung auswählbar.
+
+Das eigene Feld **FAQs durchsuchen** direkt neben dem Gruppenfilter durchsucht Fragen und Antworten nach kurzer Tipppause oder sofort mit Enter. Durch Leeren des Suchfelds werden wieder alle FAQs der gewählten Gruppe angezeigt. Die globale Shopware-Suche oben bleibt davon unabhängig. Auf schmalen Ansichten stehen Suche und Gruppenfilter untereinander.
 
 1. Unter **Kataloge > FAQ Pro > Gruppen** eine Gruppe anlegen.
 2. Der Gruppe Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter zuweisen.

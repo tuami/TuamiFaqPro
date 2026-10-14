@@ -19,7 +19,7 @@ const Shopware = {
     Mixin: { getByName: () => ({}) }, Context: {}, Data: { Criteria },
     Service: () => ({ registerCmsElement() {}, addPrivilegeMappingEntry() {} }),
 };
-vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/Resources/app/administration/src/core.js'), 'utf8'), { Shopware, Intl, Date, console });
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/Resources/app/administration/src/core.js'), 'utf8'), { Shopware, Intl, Date, console, setTimeout, clearTimeout });
 assert.equal(moduleDefinition.navigation.length, 3);
 const [parent, faqs, groups] = moduleDefinition.navigation;
 assert.equal(parent.parent, 'sw-catalogue');
@@ -50,6 +50,14 @@ console.log('PASS navigation hierarchy, labels, creation permissions, header ico
 
 (async () => {
     const def = components['tuami-faq-list'];
+    assert(def.template.includes("$t('tuami-faq.list.searchLabel')"));
+    assert(def.template.includes('@update:model-value="onSearchInput"'));
+    assert(!def.template.includes('sw-search-bar'));
+    assert(def.template.includes('flex-wrap:wrap'));
+    for (const name of ['tuami-faq-list', 'tuami-faq-group-list', 'tuami-faq-detail', 'tuami-faq-group-detail']) {
+        const buttons = components[name].template.match(/<mt-button\b[^>]*>/g);
+        assert(buttons.every(button => button.includes('size="large"')));
+    }
     const queries = [];
     const instance = { ...def.data(), repository: { search: async criteria => { queries.push(criteria); return { total: 2 }; } } };
     for (const [name, method] of Object.entries(def.methods)) { instance[name] = method.bind(instance); }
@@ -69,6 +77,28 @@ console.log('PASS navigation hierarchy, labels, creation permissions, header ico
     await instance.onGroupFilterChange(null);
     assert.equal(queries.at(-1).filters.length, 0);
     assert.equal(instance.total, 2);
+    const count = queries.length;
+    instance.onSearchInput('Ver');
+    instance.onSearchInput('Versand');
+    await new Promise(resolve => setTimeout(resolve, 350));
+    assert.equal(queries.length, count + 1, 'Typing is debounced');
+    assert.equal(queries.at(-1).term, 'Versand');
+    instance.onSearchInput('  Lieferung  ');
+    await instance.onSearch(instance.term);
+    assert.equal(queries.at(-1).term, 'Lieferung', 'Enter searches immediately and trims');
+    const afterEnter = queries.length;
+    await new Promise(resolve => setTimeout(resolve, 350));
+    assert.equal(queries.length, afterEnter, 'Enter cancels pending timer');
+    await instance.onGroupFilterChange('group-a');
+    instance.onSearchInput('');
+    await new Promise(resolve => setTimeout(resolve, 350));
+    assert.equal(queries.at(-1).term, '');
+    assert.equal(queries.at(-1).filters[0].value, 'group-a', 'Clearing search preserves group');
+    instance.onSearchInput('pending');
+    const beforeUnmount = queries.length;
+    def.beforeUnmount.call(instance);
+    await new Promise(resolve => setTimeout(resolve, 350));
+    assert.equal(queries.length, beforeUnmount, 'Unmount cancels pending search');
     const pending = [];
     instance.repository.search = () => new Promise(resolve => pending.push(resolve));
     const oldRequest = instance.onGroupFilterChange('old');
@@ -77,5 +107,5 @@ console.log('PASS navigation hierarchy, labels, creation permissions, header ico
     pending[0]({ total: 99 }); await oldRequest;
     assert.equal(instance.total, 7);
     assert.equal(instance.isLoading, false);
-    console.log('PASS group filter, clearing, search, pagination and out-of-order responses');
+    console.log('PASS large buttons, dedicated search, debounce, Enter, clearing, lifecycle, group filter, pagination and out-of-order responses');
 })().catch(error => { console.error(error); process.exitCode = 1; });

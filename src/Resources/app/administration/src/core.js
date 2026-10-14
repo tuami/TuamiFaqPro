@@ -3,17 +3,14 @@ const { Criteria } = Shopware.Data;
 
 const faqListTemplate = `
 <sw-page class="tuami-faq-list">
-    <template #search-bar>
-        <sw-search-bar :initial-search="term" @search="onSearch" />
-    </template>
     <template #smart-bar-header>
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.list.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
+        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
             {{ $t('tuami-faq.general.groups') }}
         </mt-button>
-        <mt-button
+        <mt-button size="large"
             variant="primary"
             :disabled="!acl.can('tuami_faq.creator') || undefined"
             @click="$router.push({ name: 'tuami.faq.create' })">
@@ -25,7 +22,14 @@ const faqListTemplate = `
     </template>
     <template #content>
         <div style="display:flex;flex-direction:column;height:100%;min-height:0;">
-            <div style="padding:16px 24px;flex-shrink:0;">
+            <div style="padding:16px 24px;flex-shrink:0;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;">
+                <mt-text-field
+                    :model-value="term"
+                    :label="$t('tuami-faq.list.searchLabel')"
+                    :placeholder="$t('tuami-faq.list.searchPlaceholder')"
+                    style="flex:1 1 280px;min-width:0;margin-bottom:0;"
+                    @update:model-value="onSearchInput"
+                    @keydown.enter="onSearch(term)" />
                 <sw-entity-single-select
                     :value="groupFilterId"
                     entity="tuami_faq_group"
@@ -33,7 +37,7 @@ const faqListTemplate = `
                     :label="$t('tuami-faq.list.groupFilter')"
                     :placeholder="$t('tuami-faq.list.allGroups')"
                     show-clearable-button
-                    style="max-width:400px;margin-bottom:0;"
+                    style="flex:1 1 240px;min-width:0;max-width:400px;margin-bottom:0;"
                     @update:value="onGroupFilterChange" />
             </div>
             <div style="position:relative;flex:1;min-height:0;">
@@ -72,10 +76,10 @@ const groupListTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.groupList.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
+        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
             {{ $t('tuami-faq.general.faqs') }}
         </mt-button>
-        <mt-button
+        <mt-button size="large"
             variant="primary"
             :disabled="!acl.can('tuami_faq.creator') || undefined"
             @click="$router.push({ name: 'tuami.faq.groupCreate' })">
@@ -116,10 +120,10 @@ const faqDetailTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.detail.newTitle') : (entity && entity.question) }}</span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
+        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
             {{ $t('tuami-faq.general.cancel') }}
         </mt-button>
-        <mt-button
+        <mt-button size="large"
             variant="primary"
             :is-loading="isSaving"
             :disabled="!canSave || undefined"
@@ -166,10 +170,10 @@ const groupDetailTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.groupDetail.newTitle') : (entity && entity.name) }}</span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
+        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
             {{ $t('tuami-faq.general.cancel') }}
         </mt-button>
-        <mt-button
+        <mt-button size="large"
             variant="primary"
             :is-loading="isSaving"
             :disabled="!canSave || undefined"
@@ -223,6 +227,7 @@ function createListComponent(entityName, template, columnsFactory, association) 
                 term: '',
                 groupFilterId: null,
                 listRequestId: 0,
+                searchTimer: null,
             };
         },
         computed: {
@@ -236,6 +241,10 @@ function createListComponent(entityName, template, columnsFactory, association) 
         created() {
             this.getList();
         },
+        beforeUnmount() {
+            clearTimeout(this.searchTimer);
+            this.listRequestId += 1;
+        },
         methods: {
             formatDate(value) {
                 if (!value) { return '—'; }
@@ -244,6 +253,8 @@ function createListComponent(entityName, template, columnsFactory, association) 
                 return new Intl.DateTimeFormat(this.$i18n.locale || 'de-DE', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
             },
             async getList() {
+                clearTimeout(this.searchTimer);
+                this.searchTimer = null;
                 const requestId = ++this.listRequestId;
                 this.isLoading = true;
                 const criteria = new Criteria(this.page, this.limit);
@@ -282,9 +293,17 @@ function createListComponent(entityName, template, columnsFactory, association) 
                 return this.getList();
             },
             onSearch(term) {
-                this.term = term;
+                this.term = (term || '').trim();
                 this.page = 1;
-                this.getList();
+                return this.getList();
+            },
+            onSearchInput(term) {
+                this.term = term || '';
+                clearTimeout(this.searchTimer);
+                // Ignore in-flight responses as soon as the search term changes.
+                this.listRequestId += 1;
+                this.page = 1;
+                this.searchTimer = setTimeout(() => this.onSearch(this.term), 300);
             },
             onPageChange({ page, limit }) {
                 this.page = page;
@@ -568,8 +587,8 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.6',
-    targetVersion: '1.1.6',
+    version: '1.1.7',
+    targetVersion: '1.1.7',
     snippets: {
         'de-DE': {
             'tuami-faq': {
@@ -590,6 +609,8 @@ Module.register('tuami-faq', {
                     question: 'Frage',
                     group: 'Gruppe',
                     groupFilter: 'FAQ-Gruppe',
+                    searchLabel: 'FAQs durchsuchen',
+                    searchPlaceholder: 'In Fragen und Antworten suchen …',
                     allGroups: 'Alle Gruppen',
                     active: 'Aktiv',
                     position: 'Position',
@@ -669,6 +690,8 @@ Module.register('tuami-faq', {
                     question: 'Question',
                     group: 'Group',
                     groupFilter: 'FAQ group',
+                    searchLabel: 'Search FAQs',
+                    searchPlaceholder: 'Search questions and answers …',
                     allGroups: 'All groups',
                     active: 'Active',
                     position: 'Position',
