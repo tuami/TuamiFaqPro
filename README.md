@@ -46,6 +46,8 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 ### Verhalten
 
 - erste Frage beim Laden automatisch öffnen oder geschlossen lassen
+- Überschrift zentriert, linksbündig oder ausgeblendet; im Erlebniswelt-Element überschreibbar
+- sanftes Auf- und Zuklappen mit animiertem Plus/Minus; berücksichtigt reduzierte Bewegung
 - automatische Ausgabe auf Produktseiten separat aktivieren oder deaktivieren
 - automatische Ausgabe auf Kategorieseiten separat aktivieren oder deaktivieren
 - JSON-LD und KI-Feed separat aktivieren oder deaktivieren
@@ -55,11 +57,11 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
-Version 1.1.3 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Quellcode-Abgleich und isolierte Regressionstests ersetzen keinen Test in einer vollständigen Shopware-Installation. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
+Version 1.1.5 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben. Die weiche Höhenanimation verwendet moderne Browserfunktionen; ältere Browser behalten das native Auf- und Zuklappen.
 
 ## Installation
 
-Der Arbeitsstand 1.1.5 ist eine Testversion und noch nicht öffentlich freigegeben. Der Release-Download liefert weiterhin die zuletzt veröffentlichte Version.
+Aktuelle Version: **1.1.5**.
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
