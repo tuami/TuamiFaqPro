@@ -22,6 +22,8 @@ jobs:
           php --version
           find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/isolated-regression.php "$GITHUB_WORKSPACE"
+      - name: Check administration navigation and filters
+        run: node tests/admin-navigation.cjs
       - name: Install official Shopware CLI
         uses: shopware/shopware-cli-action@68ccef7f2874c3fef004dc0947a8a9d5baeb1a07
         with:

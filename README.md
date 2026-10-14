@@ -1,6 +1,6 @@
-<img src="src/Resources/config/plugin.png" alt="TM FAQ Pro" width="64" height="64">
+<img src="src/Resources/config/plugin.png" alt="FAQ Pro" width="64" height="64">
 
-# TM FAQ Pro
+# FAQ Pro
 
 FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Kategorieseiten und in Erlebniswelten.
 
@@ -12,7 +12,7 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Automatische Ausgabe auf zugeordneten Produkt- und Kategorieseiten
 - Zuordnung über einzelne Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter
 - Einschränkung nach Verkaufskanal und Rule-Builder-Regel
-- Manuelle Platzierung über das Erlebniswelten-Element **TM FAQ Pro**
+- Manuelle Platzierung über das Erlebniswelten-Element **FAQ Pro**
 - Eigener Überschriftentext pro Erlebniswelt-Element, wahlweise zentriert, linksbündig oder ausgeblendet
 - Globale Überschriften-Darstellung pro Verkaufskanal mit optionaler Überschreibung je Erlebniswelt-Element
 - Sortierung von Gruppen und Fragen
@@ -22,7 +22,11 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Barrierearm bedienbare FAQ-Akkordeons
 - Sanfte Auf-/Zuklapp- und Plus-/Minus-Animation ohne zusätzliches JavaScript, mit Rücksicht auf reduzierte Bewegung
 
-### Neu in 1.1.5
+### Neu in 1.1.6
+
+Der Anzeigename lautet jetzt **FAQ Pro**. Unter **Kataloge → FAQ Pro** führen die Unterpunkte **FAQs** und **Gruppen** direkt zur jeweiligen Verwaltung mit Anlege-Schaltfläche. Größere Icons erleichtern die Orientierung; Änderungsdaten werden lesbar formatiert. Der neue Gruppenfilter grenzt die FAQ-Liste ein und lässt sich mit der Suche kombinieren.
+
+### Seit 1.1.5
 
 Überschriften lassen sich jetzt gezielt ausrichten oder ausblenden – global oder je Erlebniswelt-Element. Das Auf- und Zuklappen wirkt durch weichere Übergänge und ein animiertes Plus/Minus ruhiger. Außerdem wurden Cache-Aktualisierung, das Laden passender FAQs, Übersetzungen und die Deinstallation verbessert.
 
@@ -63,11 +67,11 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
-Version 1.1.5 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
+Version 1.1.6 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
 
 ## Installation
 
-Aktuelle Version: **1.1.5**.
+Aktuelle Version: **1.1.6**.
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
@@ -76,17 +80,19 @@ Aktuelle Version: **1.1.5**.
 3. Shopware-Cache leeren und die Administration neu laden.
 4. Das Storefront-Theme kompilieren.
 
-Für die Installation die oben verlinkte Plugin-ZIP verwenden, nicht GitHubs „Source code“-Archiv. Der technische Pluginname bleibt `TuamiFaqPro`; beim Update auf TM FAQ Pro bleiben die bisherigen Daten und Einstellungen erhalten.
+Für die Installation die oben verlinkte Plugin-ZIP verwenden, nicht GitHubs „Source code“-Archiv. Der technische Pluginname bleibt `TuamiFaqPro`; beim Update auf FAQ Pro bleiben die bisherigen Daten und Einstellungen erhalten.
 
 ## Verwendung
 
-1. Unter **Kataloge > TM FAQ Pro > Gruppen** eine Gruppe anlegen.
+In der FAQ-Liste lässt sich über **FAQ-Gruppe** gezielt eine Gruppe auswählen. Die Suche gilt dann innerhalb dieser Gruppe. Über das Löschen der Auswahl werden wieder **Alle Gruppen** angezeigt. Beim Filterwechsel beginnt die Liste auf Seite 1; inaktive Gruppen bleiben zur Verwaltung auswählbar.
+
+1. Unter **Kataloge > FAQ Pro > Gruppen** eine Gruppe anlegen.
 2. Der Gruppe Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter zuweisen.
 3. Unter **FAQs** Fragen und Antworten anlegen und einer Gruppe zuordnen.
 4. Optional Verkaufskanäle und eine Rule-Builder-Regel festlegen.
 5. Darstellung und Verhalten in der Plugin-Konfiguration einstellen.
 
-Eine Gruppe wird auf Produkt- oder Kategorieseiten nur automatisch angezeigt, wenn eine passende Zuordnung vorhanden ist. Gruppen ohne Zuordnung können weiterhin über das Erlebniswelten-Element **TM FAQ Pro** ausgegeben werden.
+Eine Gruppe wird auf Produkt- oder Kategorieseiten nur automatisch angezeigt, wenn eine passende Zuordnung vorhanden ist. Gruppen ohne Zuordnung können weiterhin über das Erlebniswelten-Element **FAQ Pro** ausgegeben werden.
 
 Dynamische Produktgruppen gelten für Produktseiten. Für die automatische Ausgabe auf Kategorieseiten muss die Kategorie direkt in der FAQ-Gruppe ausgewählt werden.
 
@@ -111,7 +117,7 @@ Unter **Plugin-Konfiguration → Verhalten → Darstellung der Überschrift** st
 
 ### Im Erlebniswelt-Element überschreiben
 
-1. Das Element **TM FAQ Pro** in der Erlebniswelt öffnen und die gewünschte FAQ-Gruppe auswählen.
+1. Das Element **FAQ Pro** in der Erlebniswelt öffnen und die gewünschte FAQ-Gruppe auswählen.
 2. Optional einen eigenen **Überschriftentext** eingeben. Ein leeres Textfeld übernimmt die Plugin-Überschrift; ist auch diese leer, wird die übersetzte Standardüberschrift verwendet.
 3. Unter **Darstellung der Überschrift** eine Einstellung wählen:
    - **Plugin-Einstellung übernehmen**: verwendet die Vorgabe des jeweiligen Verkaufskanals. Dies ist der Standard für bestehende und neue Elemente.
@@ -147,6 +153,6 @@ Der manuell startbare GitHub-Workflow **Build installable plugin ZIP** prüft PH
 
 ## Lizenz
 
-TM FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
+FAQ Pro darf kostenlos in privaten und gewerblichen Shops verwendet, angepasst und kostenlos weitergegeben werden. Der Verkauf des Plugins und die Aufnahme in kostenpflichtige Plugin-Pakete sind nicht erlaubt. Kostenpflichtige Installation, Anpassung und Support bleiben zulässig.
 
 Es gilt die [Community License 1.0](LICENSE). Diese ist eine Source-Available-Lizenz und keine OSI-anerkannte Open-Source-Lizenz.

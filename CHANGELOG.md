@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.6 – 14.10.2026
+
+- Serverseitiger Gruppenfilter in der FAQ-Liste, kombinierbar mit Suche und Seitennavigation; Schutz vor veralteten Antworten bei schnellem Wechsel
+- Anzeigename einheitlich „FAQ Pro“; technischer Name unverändert
+- Navigation unter Kataloge → FAQ Pro mit getrennten Unterpunkten FAQs und Gruppen
+- Deutlich sichtbare 48-Pixel-Icons in Kopfbereichen und Erlebniswelt-Vorschauen
+- Änderungsdatum in FAQ- und Gruppenlisten in lesbarem lokalisiertem Format
+
 ## 1.1.5 – 14.10.2026
 
 - Überschrift unter Verhalten zentrierbar, linksbündig oder ausblendbar; pro Erlebniswelt-Element überschreibbar

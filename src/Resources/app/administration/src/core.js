@@ -7,7 +7,7 @@ const faqListTemplate = `
         <sw-search-bar :initial-search="term" @search="onSearch" />
     </template>
     <template #smart-bar-header>
-        <h2>{{ $t('tuami-faq.list.title') }} <span v-if="!isLoading">({{ total }})</span></h2>
+        <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.list.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
         <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
@@ -24,6 +24,19 @@ const faqListTemplate = `
         <sw-language-switch @on-change="onChangeLanguage" />
     </template>
     <template #content>
+        <div style="display:flex;flex-direction:column;height:100%;min-height:0;">
+            <div style="padding:16px 24px;flex-shrink:0;">
+                <sw-entity-single-select
+                    :value="groupFilterId"
+                    entity="tuami_faq_group"
+                    label-property="name"
+                    :label="$t('tuami-faq.list.groupFilter')"
+                    :placeholder="$t('tuami-faq.list.allGroups')"
+                    show-clearable-button
+                    style="max-width:400px;margin-bottom:0;"
+                    @update:value="onGroupFilterChange" />
+            </div>
+            <div style="position:relative;flex:1;min-height:0;">
         <sw-loader v-if="isLoading" />
         <sw-entity-listing
             v-else
@@ -43,7 +56,10 @@ const faqListTemplate = `
             <template #column-active="{ item }">
                 <sw-icon :name="item.active ? 'regular-checkmark-xs' : 'regular-times-xs'" small />
             </template>
+            <template #column-updatedAt="{ item }">{{ formatDate(item.updatedAt || item.createdAt) }}</template>
         </sw-entity-listing>
+            </div>
+        </div>
     </template>
 </sw-page>`;
 
@@ -53,7 +69,7 @@ const groupListTemplate = `
         <sw-search-bar :initial-search="term" @search="onSearch" />
     </template>
     <template #smart-bar-header>
-        <h2>{{ $t('tuami-faq.groupList.title') }} <span v-if="!isLoading">({{ total }})</span></h2>
+        <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.groupList.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
         <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
@@ -89,6 +105,7 @@ const groupListTemplate = `
             <template #column-active="{ item }">
                 <sw-icon :name="item.active ? 'regular-checkmark-xs' : 'regular-times-xs'" small />
             </template>
+            <template #column-updatedAt="{ item }">{{ formatDate(item.updatedAt || item.createdAt) }}</template>
         </sw-entity-listing>
     </template>
 </sw-page>`;
@@ -96,7 +113,7 @@ const groupListTemplate = `
 const faqDetailTemplate = `
 <sw-page class="tuami-faq-detail">
     <template #smart-bar-header>
-        <h2>{{ isCreate ? $t('tuami-faq.detail.newTitle') : (entity && entity.question) }}</h2>
+        <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.detail.newTitle') : (entity && entity.question) }}</span></h2>
     </template>
     <template #smart-bar-actions>
         <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
@@ -146,7 +163,7 @@ const faqDetailTemplate = `
 const groupDetailTemplate = `
 <sw-page class="tuami-faq-group-detail">
     <template #smart-bar-header>
-        <h2>{{ isCreate ? $t('tuami-faq.groupDetail.newTitle') : (entity && entity.name) }}</h2>
+        <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.groupDetail.newTitle') : (entity && entity.name) }}</span></h2>
     </template>
     <template #smart-bar-actions>
         <mt-button variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
@@ -204,6 +221,8 @@ function createListComponent(entityName, template, columnsFactory, association) 
                 limit: 25,
                 total: 0,
                 term: '',
+                groupFilterId: null,
+                listRequestId: 0,
             };
         },
         computed: {
@@ -218,19 +237,32 @@ function createListComponent(entityName, template, columnsFactory, association) 
             this.getList();
         },
         methods: {
+            formatDate(value) {
+                if (!value) { return '—'; }
+                const date = new Date(value);
+                if (Number.isNaN(date.getTime())) { return '—'; }
+                return new Intl.DateTimeFormat(this.$i18n.locale || 'de-DE', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+            },
             async getList() {
+                const requestId = ++this.listRequestId;
                 this.isLoading = true;
                 const criteria = new Criteria(this.page, this.limit);
                 criteria.setTerm(this.term);
                 criteria.addSorting(Criteria.sort('position', 'ASC'));
+                criteria.addSorting(Criteria.sort('id', 'ASC'));
+                if (entityName === 'tuami_faq' && this.groupFilterId) {
+                    criteria.addFilter(Criteria.equals('groupId', this.groupFilterId));
+                }
                 if (association) {
                     criteria.addAssociation(association);
                 }
                 try {
                     const result = await this.repository.search(criteria, Context.api);
+                    if (requestId !== this.listRequestId) { return; }
                     this.items = result;
                     this.total = result.total;
                 } catch (error) {
+                    if (requestId !== this.listRequestId) { return; }
                     this.items = [];
                     this.total = 0;
                     const detail = error?.response?.data?.errors?.[0]?.detail || error?.message || '';
@@ -239,10 +271,15 @@ function createListComponent(entityName, template, columnsFactory, association) 
                             ? `${this.$t('tuami-faq.general.loadError')} ${detail}`
                             : this.$t('tuami-faq.general.loadError'),
                     });
-                    console.error('[TM FAQ Pro] FAQ list loading failed', error);
+                    console.error('[FAQ Pro] FAQ list loading failed', error);
                 } finally {
-                    this.isLoading = false;
+                    if (requestId === this.listRequestId) { this.isLoading = false; }
                 }
+            },
+            onGroupFilterChange(groupId) {
+                this.groupFilterId = groupId || null;
+                this.page = 1;
+                return this.getList();
             },
             onSearch(term) {
                 this.term = term;
@@ -531,13 +568,13 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.5',
-    targetVersion: '1.1.5',
+    version: '1.1.6',
+    targetVersion: '1.1.6',
     snippets: {
         'de-DE': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'TM FAQ Pro',
+                    mainMenuItem: 'FAQ Pro',
                     description: 'FAQs zentral verwalten und gezielt ausspielen',
                     faqs: 'FAQs',
                     groups: 'Gruppen',
@@ -552,6 +589,8 @@ Module.register('tuami-faq', {
                     add: 'FAQ anlegen',
                     question: 'Frage',
                     group: 'Gruppe',
+                    groupFilter: 'FAQ-Gruppe',
+                    allGroups: 'Alle Gruppen',
                     active: 'Aktiv',
                     position: 'Position',
                     updatedAt: 'Geändert am',
@@ -596,7 +635,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leer lassen, um die Gruppe in allen Verkaufskanälen zu verwenden.',
                 },
                 cms: {
-                    label: 'TM FAQ Pro',
+                    label: 'FAQ Pro',
                     group: 'FAQ-Gruppe',
                     headline: 'Überschrift',
                     headlineDisplay: 'Darstellung der Überschrift',
@@ -614,7 +653,7 @@ Module.register('tuami-faq', {
         'en-GB': {
             'tuami-faq': {
                 general: {
-                    mainMenuItem: 'TM FAQ Pro',
+                    mainMenuItem: 'FAQ Pro',
                     description: 'Manage and display FAQs centrally',
                     faqs: 'FAQs',
                     groups: 'Groups',
@@ -629,6 +668,8 @@ Module.register('tuami-faq', {
                     add: 'Add FAQ',
                     question: 'Question',
                     group: 'Group',
+                    groupFilter: 'FAQ group',
+                    allGroups: 'All groups',
                     active: 'Active',
                     position: 'Position',
                     updatedAt: 'Updated at',
@@ -673,7 +714,7 @@ Module.register('tuami-faq', {
                     salesChannelsHelp: 'Leave empty to use the group in every sales channel.',
                 },
                 cms: {
-                    label: 'TM FAQ Pro',
+                    label: 'FAQ Pro',
                     group: 'FAQ group',
                     headline: 'Headline',
                     headlineDisplay: 'Heading display',
@@ -725,11 +766,24 @@ Module.register('tuami-faq', {
         id: 'tuami-faq',
         label: 'tuami-faq.general.mainMenuItem',
         color: '#0870d1',
-        path: 'tuami.faq.index',
         icon: 'regular-comments',
         parent: 'sw-catalogue',
         privilege: 'tuami_faq.viewer',
         position: 80,
+    }, {
+        id: 'tuami-faq-questions',
+        label: 'tuami-faq.general.faqs',
+        path: 'tuami.faq.index',
+        parent: 'tuami-faq',
+        privilege: 'tuami_faq.viewer',
+        position: 10,
+    }, {
+        id: 'tuami-faq-groups',
+        label: 'tuami-faq.general.groups',
+        path: 'tuami.faq.groups',
+        parent: 'tuami-faq',
+        privilege: 'tuami_faq.viewer',
+        position: 20,
     }],
     settingsItem: {
         group: 'plugins',

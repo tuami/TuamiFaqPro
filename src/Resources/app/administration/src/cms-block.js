@@ -37,7 +37,7 @@ Shopware.Service('cmsService').registerCmsBlock({
 Locale.extend('de-DE', {
     'tuami-faq': {
         cms: {
-            label: 'TM FAQ Pro',
+            label: 'FAQ Pro',
         },
     },
 });
@@ -45,7 +45,7 @@ Locale.extend('de-DE', {
 Locale.extend('en-GB', {
     'tuami-faq': {
         cms: {
-            label: 'TM FAQ Pro',
+            label: 'FAQ Pro',
         },
     },
 });
