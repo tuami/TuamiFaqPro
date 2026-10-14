@@ -13,12 +13,18 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Zuordnung über einzelne Produkte, Kategorien, dynamische Produktgruppen oder Schlüsselwörter
 - Einschränkung nach Verkaufskanal und Rule-Builder-Regel
 - Manuelle Platzierung über das Erlebniswelten-Element **TM FAQ Pro**
-- Eigene Überschrift pro Erlebniswelten-Element
+- Eigener Überschriftentext pro Erlebniswelt-Element, wahlweise zentriert, linksbündig oder ausgeblendet
+- Globale Überschriften-Darstellung pro Verkaufskanal mit optionaler Überschreibung je Erlebniswelt-Element
 - Sortierung von Gruppen und Fragen
 - Aktivieren und Deaktivieren einzelner Gruppen und Fragen
 - Strukturierte FAQPage-Daten als JSON-LD
 - Optionaler KI-Feed unter `/faq-ai.txt`
 - Barrierearm bedienbare FAQ-Akkordeons
+- Sanfte Auf-/Zuklapp- und Plus-/Minus-Animation ohne zusätzliches JavaScript, mit Rücksicht auf reduzierte Bewegung
+
+### Neu in 1.1.5
+
+Überschriften lassen sich jetzt gezielt ausrichten oder ausblenden – global oder je Erlebniswelt-Element. Das Auf- und Zuklappen wirkt durch weichere Übergänge und ein animiertes Plus/Minus ruhiger. Außerdem wurden Cache-Aktualisierung, das Laden passender FAQs, Übersetzungen und die Deinstallation verbessert.
 
 ## Gestaltung
 
@@ -57,7 +63,7 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
-Version 1.1.5 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben. Die weiche Höhenanimation verwendet moderne Browserfunktionen; ältere Browser behalten das native Auf- und Zuklappen.
+Version 1.1.5 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
 
 ## Installation
 
@@ -101,7 +107,31 @@ Mehrere Produktzuordnungen werden mit **ODER** verknüpft. Verkaufskanal, aktive
 
 ## Darstellung der Überschrift
 
-Unter **Plugin-Konfiguration → Verhalten → Darstellung der Überschrift** stehen **Zentriert**, **Linksbündig** und **Ausblenden** zur Verfügung. Standard bleibt zentriert. In jedem FAQ-Erlebniswelt-Element kann diese Einstellung separat überschrieben werden; **Plugin-Einstellung übernehmen** verwendet die Konfiguration des jeweiligen Verkaufskanals. Der Überschriftentext bleibt beim Ausblenden gespeichert. Eine leere Textangabe übernimmt weiterhin die Standardüberschrift.
+Unter **Plugin-Konfiguration → Verhalten → Darstellung der Überschrift** stehen **Zentriert**, **Linksbündig** und **Ausblenden** zur Verfügung. Standard bleibt zentriert. Die Einstellung gilt für die automatische Ausgabe auf Produkt- und Kategorieseiten sowie für Erlebniswelt-Elemente ohne eigene Vorgabe.
+
+### Im Erlebniswelt-Element überschreiben
+
+1. Das Element **TM FAQ Pro** in der Erlebniswelt öffnen und die gewünschte FAQ-Gruppe auswählen.
+2. Optional einen eigenen **Überschriftentext** eingeben. Ein leeres Textfeld übernimmt die Plugin-Überschrift; ist auch diese leer, wird die übersetzte Standardüberschrift verwendet.
+3. Unter **Darstellung der Überschrift** eine Einstellung wählen:
+   - **Plugin-Einstellung übernehmen**: verwendet die Vorgabe des jeweiligen Verkaufskanals. Dies ist der Standard für bestehende und neue Elemente.
+   - **Zentriert** oder **Linksbündig**: zeigt die Überschrift in dieser Ausrichtung – auch wenn sie global ausgeblendet ist.
+   - **Ausblenden**: zeigt für dieses Element keine Überschrift, unabhängig von der globalen Vorgabe.
+4. Die Erlebniswelt speichern.
+
+Beim Ausblenden bleiben der Überschriftentext, die Fragen und Antworten erhalten. Es bleibt kein leerer Überschriftenabstand zurück. **Leeres Textfeld bedeutet übernehmen, nicht ausblenden.** Layout und Farben werden weiterhin über die Plugin-Konfiguration gesteuert.
+
+### Animation und Bedienung
+
+Der Antwortbereich öffnet weich und schließt etwas schneller. Der senkrechte Balken des Pluszeichens zieht sich beim Öffnen zum Minus zurück. Die Darstellung funktioniert mit Karten und Trennlinien; eine zusätzliche Einstellung ist nicht erforderlich.
+
+Die System-/Browsereinstellung **Bewegung reduzieren** deaktiviert die Übergänge. Die weiche Höhenanimation setzt Unterstützung für moderne CSS-Funktionen voraus; ältere Browser behalten das native Auf- und Zuklappen. Die Bedienung per Tastatur bleibt erhalten.
+
+## Daten und Deinstallation
+
+Änderungen an FAQs, Gruppen, Übersetzungen und dynamischen Produktgruppen lösen eine Invalidierung des FAQ-Caches aus. Für die automatische Ausgabe werden FAQ-Antworten erst geladen, nachdem die passenden Gruppen ermittelt wurden.
+
+Bei einer Deinstallation bleiben FAQ-Daten erhalten, wenn **Benutzerdaten behalten** ausgewählt ist. Ohne diese Option werden die eigenen FAQ-Tabellen entfernt. Vor einer Deinstallation oder einem Update empfiehlt sich eine Datensicherung.
 
 ## Entwicklung und Build
 
@@ -113,7 +143,7 @@ bash tools/build-release.sh
 
 Der offizielle esbuild-Modus erstellt Administration- und Storefront-Assets samt Manifesten. Die ZIP entsteht über `extension package --disable-git --release` aus dem aktuellen Quellcode. Kein manuelles Zusammenfügen von JavaScript und keine handgeschriebenen Build-Manifeste. Nach Installation das Theme kompilieren; Storefront-Styles stammen ausschließlich aus `base.scss`.
 
-Eine leere Plugin-Überschrift verwendet die aktuelle Storefront-Sprache. Bereits gespeicherte eigene Überschriften bleiben erhalten; für den Sprachwechsel bitte das Feld leeren. Bei Deinstallation bleiben FAQ-Daten nur dann erhalten, wenn „Benutzerdaten behalten“ ausgewählt ist.
+Der manuell startbare GitHub-Workflow **Build installable plugin ZIP** prüft PHP-Syntax und isolierte Regressionstests, baut mit Shopware CLI und kontrolliert die ZIP-Struktur. Er erzeugt ein Download-Artefakt, veröffentlicht aber nicht automatisch ein Release.
 
 ## Lizenz
 

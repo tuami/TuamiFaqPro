@@ -3,7 +3,10 @@
 ## 1.1.5 – 14.10.2026
 
 - Überschrift unter Verhalten zentrierbar, linksbündig oder ausblendbar; pro Erlebniswelt-Element überschreibbar
+- Erlebniswelt-Elemente übernehmen standardmäßig die Verkaufskanal-Vorgabe; eigene Ausrichtung und Sichtbarkeit haben Vorrang
+- Ausblenden erhält den gespeicherten Überschriftentext und entfernt den sichtbaren Überschriftenabstand
 - Sanfte FAQ-Animation und Plus-/Minus-Übergang mit Unterstützung für reduzierte Bewegung
+- Bestehende Überschriften bleiben standardmäßig zentriert; ältere Browser behalten natives Auf-/Zuklappen
 
 ### Enthaltene Verbesserungen aus der nicht öffentlich veröffentlichten Testversion 1.1.4
 
