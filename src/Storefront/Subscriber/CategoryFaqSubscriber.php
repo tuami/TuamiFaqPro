@@ -2,14 +2,8 @@
 
 namespace Tuami\FaqPro\Storefront\Subscriber;
 
-use Tuami\FaqPro\Core\Content\Faq\FaqCollection;
-use Tuami\FaqPro\Core\Content\Faq\FaqEntity;
+use Tuami\FaqPro\Storefront\FaqLoader;
 use Tuami\FaqPro\Storefront\FaqPresentationConfig;
-use Tuami\FaqPro\Storefront\FaqVisibilityService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Navigation\NavigationPageLoadedEvent;
@@ -17,11 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CategoryFaqSubscriber implements EventSubscriberInterface
 {
-    /** @param EntityRepository<FaqCollection> $faqRepository */
     public function __construct(
-        private readonly EntityRepository $faqRepository,
+        private readonly FaqLoader $faqLoader,
         private readonly SystemConfigService $systemConfigService,
-        private readonly FaqVisibilityService $visibilityService,
         private readonly FaqPresentationConfig $presentationConfig
     ) {
     }
@@ -43,25 +35,7 @@ final class CategoryFaqSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $criteria = new Criteria();
-        $criteria->addAssociation('group');
-        $criteria->addFilter(new EqualsFilter('active', true));
-        $criteria->addFilter(new EqualsFilter('group.active', true));
-        $criteria->addSorting(new FieldSorting('group.position'));
-        $criteria->addSorting(new FieldSorting('position'));
-
-        $faqs = $this->faqRepository->search($criteria, $event->getContext())->getEntities();
-        $items = \array_values(\array_filter(
-            $faqs->getElements(),
-            fn (FaqEntity $faq): bool => $this->visibilityService->isAvailableInSalesChannel(
-                $faq,
-                $salesChannelId,
-                $salesChannelContext->getRuleIds()
-            )
-                && $this->visibilityService->matchesCategory($faq, $category->getId())
-                && $faq->getQuestion() !== null
-                && $faq->getAnswer() !== null
-        ));
+        $items = $this->faqLoader->load($salesChannelContext, categoryId: $category->getId());
 
         if ($items === []) {
             return;

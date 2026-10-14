@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.4 (in Vorbereitung)
+
+- Cache-Tags auch für Seiten ohne passende FAQs; Invalidierung bei FAQ-, Gruppen-, Übersetzungs- und Produktgruppenänderungen
+- FAQ-Antworten werden erst nach Ermittlung der passenden Gruppen geladen
+- Deinstallation entfernt eigene Tabellen nur bei deaktivierter Option zum Behalten der Benutzerdaten
+- Übersetzte Standardüberschrift mit korrekt benannten Storefront-Sprachdateien
+- Styles ausschließlich über Shopwares SCSS-/Theme-Verarbeitung
+- Eigenen JavaScript-Bundler durch den offiziellen Shopware-CLI-Build ersetzt
+- Noch kein Installationspaket freigegeben: offizieller Build und vollständiger Shopware-Test ausstehend
+
 ## 1.1.3
 
 - Anpassungen anhand der Shopware-Änderungen bis 6.7.15.1

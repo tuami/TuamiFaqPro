@@ -23,7 +23,13 @@ final class FaqVisibilityService
     public function isAvailableInSalesChannel(FaqEntity $faq, string $salesChannelId, array $activeRuleIds = []): bool
     {
         $group = $faq->getGroup();
-        if (!$group instanceof FaqGroupEntity || !$group->isActive()) {
+        return $group instanceof FaqGroupEntity && $this->isGroupAvailable($group, $salesChannelId, $activeRuleIds);
+    }
+
+    /** @param list<string> $activeRuleIds */
+    public function isGroupAvailable(FaqGroupEntity $group, string $salesChannelId, array $activeRuleIds = []): bool
+    {
+        if (!$group->isActive()) {
             return false;
         }
 
@@ -43,6 +49,13 @@ final class FaqVisibilityService
         if (!$group instanceof FaqGroupEntity) {
             return false;
         }
+
+        return $this->matchesGroupProduct($group, $product, $matchingProductStreamIds);
+    }
+
+    /** @param list<string> $matchingProductStreamIds */
+    public function matchesGroupProduct(FaqGroupEntity $group, ProductEntity $product, array $matchingProductStreamIds = []): bool
+    {
 
         $productIds = $group->getProductIds() ?? [];
 

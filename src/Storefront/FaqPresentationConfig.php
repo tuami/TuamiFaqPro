@@ -3,10 +3,14 @@
 namespace Tuami\FaqPro\Storefront;
 
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class FaqPresentationConfig
 {
-    public function __construct(private readonly SystemConfigService $systemConfigService)
+    public function __construct(
+        private readonly SystemConfigService $systemConfigService,
+        private readonly TranslatorInterface $translator
+    )
     {
     }
 
@@ -14,7 +18,7 @@ final class FaqPresentationConfig
     {
         $headline = \trim((string) ($this->systemConfigService->get('TuamiFaqPro.config.headline', $salesChannelId) ?? ''));
 
-        return $headline !== '' ? $headline : 'Häufig gestellte Fragen';
+        return $headline !== '' ? $headline : $this->translator->trans('tuamiFaq.title');
     }
 
     /** @return array{layoutStyle:string,widthMode:string,maxWidth:int,itemGap:int,borderRadius:int,dividerColor:string,useItemBackground:bool,itemBackgroundColor:string,activeBackgroundColor:string,activeTextColor:string,openFirstItem:bool} */

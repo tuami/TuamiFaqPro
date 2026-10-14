@@ -7,6 +7,8 @@ use Tuami\FaqPro\Core\Content\FaqGroup\FaqGroupDefinition;
 use Tuami\FaqPro\Core\Content\FaqGroup\Aggregate\FaqGroupTranslation\FaqGroupTranslationDefinition;
 use Tuami\FaqPro\Storefront\FaqPresentationConfig;
 use Tuami\FaqPro\Storefront\FaqVisibilityService;
+use Tuami\FaqPro\Storefront\FaqLoader;
+use Tuami\FaqPro\Storefront\Subscriber\FaqCacheSubscriber;
 use Tuami\FaqPro\Storefront\Subscriber\ProductFaqSubscriber;
 use Tuami\FaqPro\Storefront\Subscriber\CategoryFaqSubscriber;
 use Tuami\FaqPro\Storefront\Cms\FaqCmsElementResolver;
@@ -23,13 +25,17 @@ return static function (ContainerConfigurator $container): void {
         $services->set($definition)->tag('shopware.entity.definition');
     }
 
-    $services->set(FaqPresentationConfig::class);
+    $services->set(FaqPresentationConfig::class)->arg('$translator', service('translator'));
+    $services->set(FaqCacheSubscriber::class);
+    $services->set(FaqLoader::class)
+        ->arg('$faqRepository', service('tuami_faq.repository'))
+        ->arg('$groupRepository', service('tuami_faq_group.repository'));
     $services->set(FaqVisibilityService::class)
         ->arg('$productStreamBuilder', service(ProductStreamBuilder::class))
         ->arg('$productRepository', service('product.repository'));
 
     foreach ([ProductFaqSubscriber::class, CategoryFaqSubscriber::class] as $subscriber) {
-        $services->set($subscriber)->arg('$faqRepository', service('tuami_faq.repository'));
+        $services->set($subscriber);
     }
 
     $services->set(FaqCmsElementResolver::class)->tag('shopware.cms.data_resolver');

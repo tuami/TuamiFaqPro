@@ -4,7 +4,7 @@
     <card>
         <title>General</title><title lang="de-DE">Allgemein</title>
         <input-field type="bool" cache-relevant="true"><name>enabled</name><label>Enable FAQ output</label><label lang="de-DE">FAQ-Ausgabe aktivieren</label><defaultValue>true</defaultValue></input-field>
-        <input-field type="text" cache-relevant="true"><name>headline</name><label>Storefront headline</label><label lang="de-DE">Überschrift im Storefront</label><defaultValue>Häufig gestellte Fragen</defaultValue></input-field>
+        <input-field type="text" cache-relevant="true"><name>headline</name><label>Storefront headline</label><label lang="de-DE">Überschrift im Storefront</label><helpText>Leave empty to use the translated heading.</helpText><helpText lang="de-DE">Leer lassen, um die übersetzte Überschrift zu verwenden.</helpText></input-field>
         <input-field type="bool" cache-relevant="true"><name>showOnProductPages</name><label>Show assigned FAQ groups on product pages</label><label lang="de-DE">Zugeordnete FAQ-Gruppen auf Produktseiten anzeigen</label><defaultValue>true</defaultValue></input-field>
         <input-field type="bool" cache-relevant="true"><name>showOnCategoryPages</name><label>Show assigned FAQ groups on category pages</label><label lang="de-DE">Zugeordnete FAQ-Gruppen auf Kategorieseiten anzeigen</label><defaultValue>true</defaultValue></input-field>
         <input-field type="bool" cache-relevant="true"><name>enableJsonLd</name><label>Output FAQPage structured data</label><label lang="de-DE">FAQPage-Strukturdaten ausgeben</label><defaultValue>true</defaultValue></input-field>

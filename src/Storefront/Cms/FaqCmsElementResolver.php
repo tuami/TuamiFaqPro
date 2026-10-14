@@ -7,6 +7,8 @@ use Tuami\FaqPro\Core\Content\Faq\FaqDefinition;
 use Tuami\FaqPro\Core\Content\Faq\FaqEntity;
 use Tuami\FaqPro\Storefront\FaqPresentationConfig;
 use Tuami\FaqPro\Storefront\FaqVisibilityService;
+use Tuami\FaqPro\Storefront\FaqLoader;
+use Shopware\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Shopware\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Shopware\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Shopware\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
@@ -24,7 +26,8 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
     public function __construct(
         private readonly FaqVisibilityService $visibilityService,
         private readonly SystemConfigService $systemConfigService,
-        private readonly FaqPresentationConfig $presentationConfig
+        private readonly FaqPresentationConfig $presentationConfig,
+        private readonly CacheTagCollector $cacheTags
     ) {
     }
 
@@ -35,6 +38,7 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
 
     public function collect(CmsSlotEntity $slot, ResolverContext $resolverContext): ?CriteriaCollection
     {
+        $this->cacheTags->addTag(FaqLoader::CACHE_TAG);
         if (!$this->isEnabled($resolverContext->getSalesChannelContext()->getSalesChannelId())) {
             return null;
         }

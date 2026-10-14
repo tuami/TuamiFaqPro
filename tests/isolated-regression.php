@@ -2,9 +2,29 @@
 // Isolated regression checks: real plugin classes with minimal framework doubles.
 namespace Shopware\Core\Framework\DataAbstractionLayer {
  class Entity {}
+ class EntityCollection implements \IteratorAggregate {
+  public function __construct(private array $elements=[]){}
+  public function getElements(): array{return $this->elements;}
+  public function getIterator(): \Traversable{return new \ArrayIterator($this->elements);}
+ }
  trait EntityIdTrait { protected string $id; public function getId(): string{return $this->id;} public function setId(string $id): void{$this->id=$id;} }
  class EntityRepository {
   public array $queries=[];
+  public array $searches=[];
+  public function __construct(public array $fixtures=[]){}
+  public function search($criteria,$context): object {
+   $this->searches[]=$criteria;
+   $items=$this->fixtures;
+   foreach($criteria->filters as $filter){
+    if($filter instanceof \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter && $filter->field==='groupId'){
+     $items=array_filter($items,fn($faq)=>in_array($faq->getGroup()->getId(),$filter->value,true));
+    }
+   }
+   return new class($items){
+    public function __construct(private array $items){}
+    public function getEntities(): EntityCollection{return new EntityCollection($this->items);}
+   };
+  }
   public function searchIds($criteria,$context): object {
    $this->queries[]=$criteria;
    return new class($criteria->filters) {
@@ -25,7 +45,33 @@ namespace Shopware\Core\Content\Product {
   public function getProductNumber(): string {return 'SW10000.16';}
  }
 }
-namespace Shopware\Core\Framework { class Context {} }
+namespace Shopware\Core\Framework {
+ class Context {}
+ class Plugin {public object $container; public function uninstall(\Shopware\Core\Framework\Plugin\Context\UninstallContext $context): void{}}
+}
+namespace Shopware\Core\Framework\Plugin\Context {
+ class UninstallContext {public function __construct(private bool $keep){} public function keepUserData(): bool{return $this->keep;}}
+}
+namespace Doctrine\DBAL {
+ class Connection {public array $statements=[]; public function executeStatement(string $sql): void{$this->statements[]=$sql;}}
+}
+namespace Symfony\Component\EventDispatcher {interface EventSubscriberInterface {public static function getSubscribedEvents(): array;}}
+namespace Symfony\Contracts\Translation {interface TranslatorInterface {public function trans(string $id,array $parameters=[],?string $domain=null,?string $locale=null): string;}}
+namespace Shopware\Core\Framework\Adapter\Cache {
+ class CacheTagCollector {public array $tags=[];public function addTag(string ...$tags): void{array_push($this->tags,...$tags);}}
+ class CacheInvalidator {public array $calls=[];public function invalidate(array $tags,bool $force=false): void{$this->calls[]=[$tags,$force];}}
+}
+namespace Shopware\Core\Framework\DataAbstractionLayer\Event {
+ class EntityWrittenContainerEvent {public function __construct(private array $entities){}public function getPrimaryKeys(string $entity): array{return $this->entities[$entity] ?? [];}}
+}
+namespace Shopware\Core\System\SalesChannel {
+ class SalesChannelContext {
+  public function __construct(private string $id='channel-a',private array $rules=[]){}
+  public function getSalesChannelId(): string{return $this->id;}
+  public function getRuleIds(): array{return $this->rules;}
+  public function getContext(): \Shopware\Core\Framework\Context{return new \Shopware\Core\Framework\Context();}
+ }
+}
 namespace Shopware\Core\Content\ProductStream\Service {
  interface ProductStreamBuilderInterface {}
  abstract class AbstractProductStreamBuilder {
@@ -38,10 +84,14 @@ namespace Shopware\Core\Framework\DataAbstractionLayer\Search {
   public function __construct(public array $ids=[]){}
   public function addAssociation($v): void{}
   public function addFilter(...$values): void{array_push($this->filters,...$values);}
-  public function addSorting($v): void{}
+  public function addSorting(...$v): void{}
  }
 }
-namespace Shopware\Core\Framework\DataAbstractionLayer\Search\Filter { class EqualsFilter { public function __construct(public string $field,public mixed $value){} } }
+namespace Shopware\Core\Framework\DataAbstractionLayer\Search\Filter {
+ class EqualsFilter { public function __construct(public string $field,public mixed $value){} }
+ class EqualsAnyFilter extends EqualsFilter {}
+ class MultiFilter {const CONNECTION_OR='OR';public function __construct(public string $operator,public array $queries){}}
+}
 namespace Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting { class FieldSorting { public function __construct($v){} } }
 namespace Shopware\Core\Framework\Struct { class ArrayStruct { public function __construct(public array $data, string $name=''){} } }
 namespace Shopware\Core\System\SystemConfig {
@@ -72,7 +122,7 @@ namespace Shopware\Core\Content\Cms\Aggregate\CmsSlot {
 }
 namespace {
  $root=$argv[1];
- foreach(['Core/Content/Faq/FaqEntity.php','Core/Content/FaqGroup/FaqGroupEntity.php','Storefront/FaqVisibilityService.php','Storefront/FaqPresentationConfig.php','Storefront/Cms/FaqCmsElementResolver.php'] as $file){require $root.'/src/'.$file;}
+ foreach(['Core/Content/Faq/FaqEntity.php','Core/Content/FaqGroup/FaqGroupEntity.php','Storefront/FaqVisibilityService.php','Storefront/FaqPresentationConfig.php','Storefront/FaqLoader.php','Storefront/Subscriber/FaqCacheSubscriber.php','TuamiFaqPro.php','Storefront/Cms/FaqCmsElementResolver.php'] as $file){require $root.'/src/'.$file;}
  $count=0;
  function check(bool $ok,string $label): void {global $count;if(!$ok){throw new \RuntimeException($label);}++$count;echo "PASS $label\n";}
  $builder=new class implements \Shopware\Core\Content\ProductStream\Service\ProductStreamBuilderInterface {};
@@ -115,8 +165,13 @@ namespace {
  check(!$service->isAvailableInSalesChannel($faq,'channel-a',[]),'unmatched rule excluded');
  check($service->isAvailableInSalesChannel($faq,'channel-a',['rule-a']),'matched rule included');
  $config=new \Shopware\Core\System\SystemConfig\SystemConfigService();
- $presentation=new \Tuami\FaqPro\Storefront\FaqPresentationConfig($config);
- $cms=new \Tuami\FaqPro\Storefront\Cms\FaqCmsElementResolver($service,$config,$presentation);
+ $translator=new class implements \Symfony\Contracts\Translation\TranslatorInterface {
+  public string $language='en';
+  public function trans(string $id,array $parameters=[],?string $domain=null,?string $locale=null): string{return $this->language==='de' ? 'Häufig gestellte Fragen' : 'Frequently asked questions';}
+ };
+ $presentation=new \Tuami\FaqPro\Storefront\FaqPresentationConfig($config,$translator);
+ $cacheTags=new \Shopware\Core\Framework\Adapter\Cache\CacheTagCollector();
+ $cms=new \Tuami\FaqPro\Storefront\Cms\FaqCmsElementResolver($service,$config,$presentation,$cacheTags);
  $context=new \Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext(new class {
   public function getSalesChannelId(): string{return 'channel-a';}
  });
@@ -156,5 +211,54 @@ namespace {
  };
  $legacyService=new \Tuami\FaqPro\Storefront\FaqVisibilityService($legacyBuilder,new \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository());
  check($legacyService->matchingProductStreamIds(['stream-a','stream-b'],'product-a',$dalContext)===['stream-a'],'older Shopware 6.7 builder remains supported');
+ check(in_array(\Tuami\FaqPro\Storefront\FaqLoader::CACHE_TAG,$cacheTags->tags,true),'CMS collection adds FAQ cache tag');
+ $config->values=[];
+ check($presentation->headline('channel-a')==='Frequently asked questions','missing headline is translated to English');
+ $translator->language='de';
+ check($presentation->headline('channel-a')==='Häufig gestellte Fragen','missing headline follows German locale');
+ $config->values=['global'=>['TuamiFaqPro.config.headline'=>'Meine Überschrift']];
+ check($presentation->headline('channel-a')==='Meine Überschrift','custom headline preserved');
+ $config->values['channel-a']=['TuamiFaqPro.config.headline'=>''];$translator->language='en';
+ check($presentation->headline('channel-a')==='Frequently asked questions','empty channel headline uses translation');
+
+ $invalidator=new \Shopware\Core\Framework\Adapter\Cache\CacheInvalidator();
+ $subscriber=new \Tuami\FaqPro\Storefront\Subscriber\FaqCacheSubscriber($invalidator);
+ foreach(['tuami_faq','tuami_faq_translation','tuami_faq_group','tuami_faq_group_translation','product_stream','product_stream_filter','rule','rule_condition'] as $entity){
+  $subscriber->invalidate(new \Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent([$entity=>['changed-or-deleted-id']]));
+  check(end($invalidator->calls)===[['tuami-faq'],true],"immediate FAQ invalidation for $entity");
+ }
+ $before=count($invalidator->calls);
+ $subscriber->invalidate(new \Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent(['customer'=>['id']]));
+ check(count($invalidator->calls)===$before,'unrelated writes leave FAQ cache intact');
+
+ $group->setId('group-a');$group->setRuleId(null);$group->setSalesChannelIds([]);$group->setProductIds(['product-a']);$group->setCategoryIds(['category-a']);
+ $faq->setQuestion('Question');$faq->setAnswer('Answer');
+ $otherGroup=clone $group;$otherGroup->setId('group-b');$otherGroup->setProductIds(['product-b']);$otherGroup->setCategoryIds(['category-b']);
+ $otherFaq=clone $faq;$otherFaq->setGroup($otherGroup);
+ $groupRepo=new \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository([$group,$otherGroup]);
+ $faqRepo=new \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository([$faq,$otherFaq]);
+ $tags=new \Shopware\Core\Framework\Adapter\Cache\CacheTagCollector();
+ $loader=new \Tuami\FaqPro\Storefront\FaqLoader($faqRepo,$groupRepo,$modernService,$tags);
+ $channel=new \Shopware\Core\System\SalesChannel\SalesChannelContext();
+ check($loader->load($channel,$variant)===[$faq],'loader limits parent-product assignment to matching group');
+ check($faqRepo->searches[0]->filters[0]->value===['group-a'],'answer query is restricted by group IDs');
+ check($loader->load($channel,categoryId:'category-a')===[$faq],'loader matches direct category only');
+ $before=count($faqRepo->searches);
+ check($loader->load($channel,categoryId:'category-child')===[],'loader excludes subcategory');
+ check(count($faqRepo->searches)===$before,'unmatched category does not load any FAQ answers');
+ check(count($tags->tags)===3,'empty results are also cache tagged');
+ $group->setSalesChannelIds(['other-channel']);
+ check($loader->load($channel,$variant)===[],'loader excludes unavailable sales channel');
+ $group->setSalesChannelIds([]);$group->setRuleId('rule-a');
+ check($loader->load($channel,$variant)===[],'loader excludes unmatched rule');
+ check($loader->load(new \Shopware\Core\System\SalesChannel\SalesChannelContext('channel-a',['rule-a']),$variant)===[$faq],'loader includes matching rule');
+
+ $connection=new \Doctrine\DBAL\Connection();
+ $plugin=new \Tuami\FaqPro\TuamiFaqPro();
+ $plugin->container=new class($connection){public function __construct(private object $connection){}public function get(string $id): object{return $this->connection;}};
+ $plugin->uninstall(new \Shopware\Core\Framework\Plugin\Context\UninstallContext(true));
+ check($connection->statements===[],'keepUserData never executes destructive SQL');
+ $plugin->uninstall(new \Shopware\Core\Framework\Plugin\Context\UninstallContext(false));
+ check($connection->statements===array_map(fn($table)=>'DROP TABLE IF EXISTS `'.$table.'`',['tuami_faq_translation','tuami_faq_group_translation','tuami_faq','tuami_faq_group']),'uninstall removes only four owned tables in dependency order');
  echo "$count checks passed\n";
 }

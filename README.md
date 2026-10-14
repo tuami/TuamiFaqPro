@@ -59,6 +59,8 @@ Version 1.1.3 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.
 
 ## Installation
 
+Der Arbeitsstand 1.1.4 ist noch nicht freigegeben. Der Release-Download liefert weiterhin die zuletzt veröffentlichte Version.
+
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
 1. Die heruntergeladene TuamiFaqPro.zip unter **Erweiterungen > Meine Erweiterungen** hochladen.
@@ -94,6 +96,18 @@ Kategoriezuordnungen gelten ausschließlich für die direkt ausgewählten Katego
 | Keine Zuordnung | Nur durch manuelle Platzierung in den Erlebniswelten |
 
 Mehrere Produktzuordnungen werden mit **ODER** verknüpft. Verkaufskanal, aktive Gruppe und eine gegebenenfalls hinterlegte Regel müssen ebenfalls passen.
+
+## Entwicklung und Build
+
+Releases werden mit Shopware CLI unter Linux/WSL, macOS oder Docker gebaut:
+
+```sh
+bash tools/build-release.sh
+```
+
+Der offizielle esbuild-Modus erstellt Administration- und Storefront-Assets samt Manifesten. Die ZIP entsteht über `extension package --disable-git --release` aus dem aktuellen Quellcode. Kein manuelles Zusammenfügen von JavaScript und keine handgeschriebenen Build-Manifeste. Nach Installation das Theme kompilieren; Storefront-Styles stammen ausschließlich aus `base.scss`.
+
+Eine leere Plugin-Überschrift verwendet die aktuelle Storefront-Sprache. Bereits gespeicherte eigene Überschriften bleiben erhalten; für den Sprachwechsel bitte das Feld leeren. Bei Deinstallation bleiben FAQ-Daten nur dann erhalten, wenn „Benutzerdaten behalten“ ausgewählt ist.
 
 ## Lizenz
 

@@ -1,0 +1,42 @@
+name: Build installable plugin ZIP
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      DO_NOT_TRACK: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check PHP syntax and isolated regressions
+        run: |
+          php --version
+          find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
+          php tests/isolated-regression.php "$GITHUB_WORKSPACE"
+      - name: Install official Shopware CLI
+        uses: shopware/shopware-cli-action@68ccef7f2874c3fef004dc0947a8a9d5baeb1a07
+        with:
+          version: '0.19.1'
+      - name: Build with Shopware CLI
+        run: |
+          mkdir -p "$RUNNER_TEMP/plugin-output"
+          cd "$RUNNER_TEMP/plugin-output"
+          bash "$GITHUB_WORKSPACE/tools/build-release.sh"
+      - name: Verify installation archive
+        run: python3 tools/verify-package.py "$RUNNER_TEMP/plugin-output"
+      - name: Upload test installation ZIP (no release)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: TM-FAQ-Pro-test-installation
+          path: ${{ runner.temp }}/plugin-output/*.zip
+          if-no-files-found: error
+          retention-days: 14

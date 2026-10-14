@@ -10,8 +10,8 @@ $loader = new Symfony\Component\DependencyInjection\Loader\PhpFileLoader(
 );
 $loader->load('services.php');
 $definitions = array_filter($container->getDefinitions(), static fn(string $id): bool => str_starts_with($id, 'Tuami\\FaqPro\\'), ARRAY_FILTER_USE_KEY);
-if (count($definitions) !== 10) {
-    throw new RuntimeException('Expected exactly 10 plugin services');
+if (count($definitions) !== 12) {
+    throw new RuntimeException('Expected exactly 12 plugin services');
 }
 $visibility = $container->getDefinition('Tuami\FaqPro\Storefront\FaqVisibilityService');
 if ((string) $visibility->getArgument('$productRepository') !== 'product.repository') {
@@ -25,7 +25,7 @@ foreach ($definitions as $id => $definition) {
 if (!$container->getDefinition('Tuami\FaqPro\Storefront\Controller\FaqAiController')->isPublic()) {
     throw new RuntimeException('AI controller must remain public');
 }
-echo "PASS Symfony PHP service configuration: 10 services, defaults and wiring\n";
+echo "PASS Symfony PHP service configuration: 12 services, defaults and wiring\n";
 
 // Resolve the route import with Symfony; capture its path/type without booting Shopware.
 $capture = new class extends Symfony\Component\Config\Loader\Loader {
