@@ -1,10 +1,11 @@
 # Changelog
 
-## 1.1.8 (Testversion)
+## 1.1.8 – 14.10.2026
 
 - Erweiterungsname unter „Meine Erweiterungen“ wieder „TM FAQ Pro“; Verwaltungsmenü bleibt „FAQ Pro“
 - Buttons in Shopwares Standardgröße wie in der Herstellerverwaltung (40 Pixel)
 - „FAQ Pro“ öffnet die FAQ-Liste; Gruppenübersicht nicht mehr fälschlich als Unterseite der FAQ-Liste markiert
+- Verbesserter Umbruch der Such- und Filterzeile; Regressionstests für alle sechs Verwaltungsrouten ergänzt
 
 ## 1.1.7 – 14.10.2026
 

@@ -22,11 +22,11 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 - Barrierearm bedienbare FAQ-Akkordeons
 - Sanfte Auf-/Zuklapp- und Plus-/Minus-Animation ohne zusätzliches JavaScript, mit Rücksicht auf reduzierte Bewegung
 
-### Neu in 1.1.7
+### Neu in 1.1.8
 
-**Teststand 1.1.8:** Buttons entsprechen wieder Shopwares Standardgröße (40 Pixel). „FAQ Pro“ ist anklickbar und öffnet die FAQ-Liste. Die aktive Markierung unterscheidet FAQs und Gruppen korrekt, auch beim Anlegen und Bearbeiten. Unter „Meine Erweiterungen“ bleibt der Name **TM FAQ Pro**. Der öffentliche Download liefert weiterhin 1.1.7 bis zur Freigabe der Testversion.
+Buttons entsprechen Shopwares Standardgröße (40 Pixel), wie in der Herstellerverwaltung. „FAQ Pro“ ist anklickbar und öffnet die FAQ-Liste. Die aktive Markierung unterscheidet FAQs und Gruppen korrekt, auch beim Anlegen und Bearbeiten. Unter „Meine Erweiterungen“ lautet der Name **TM FAQ Pro**, im Verwaltungsmenü weiterhin **FAQ Pro**.
 
-Eine eigene **FAQ-Suche** steht direkt neben dem Gruppenfilter und durchsucht Fragen und Antworten. Sie reagiert nach kurzer Tipppause oder sofort mit Enter. Auf schmalen Ansichten stehen die Felder untereinander. Die Aktionsbuttons in FAQ- und Gruppenverwaltung sind jetzt mit Shopwares Größe „large“ deutlich größer.
+Eine eigene **FAQ-Suche** steht direkt neben dem Gruppenfilter und durchsucht Fragen und Antworten. Sie reagiert nach kurzer Tipppause oder sofort mit Enter. Auf schmalen Ansichten stehen die Felder untereinander; ihr Umbruch wurde nochmals verbessert.
 
 ### Seit 1.1.6
 
@@ -73,11 +73,11 @@ Die Darstellung wird in der Plugin-Konfiguration allgemein für den jeweiligen V
 - Shopware 6.7
 - PHP gemäß der verwendeten Shopware-Version
 
-Version 1.1.7 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
+Version 1.1.8 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.1. Vor dem Live-Update bitte in einer Testumgebung prüfen; Shopware 6.8 ist nicht freigegeben.
 
 ## Installation
 
-Aktuelle Version: **1.1.7**.
+Aktuelle Version: **1.1.8**.
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
