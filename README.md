@@ -24,6 +24,8 @@ FAQ-Verwaltung für Shopware 6.7 mit gezielter Ausgabe auf Produktseiten, Katego
 
 ### Neu in 1.1.7
 
+**Teststand 1.1.8:** Buttons entsprechen wieder Shopwares Standardgröße (40 Pixel). „FAQ Pro“ ist anklickbar und öffnet die FAQ-Liste. Die aktive Markierung unterscheidet FAQs und Gruppen korrekt, auch beim Anlegen und Bearbeiten. Unter „Meine Erweiterungen“ bleibt der Name **TM FAQ Pro**. Der öffentliche Download liefert weiterhin 1.1.7 bis zur Freigabe der Testversion.
+
 Eine eigene **FAQ-Suche** steht direkt neben dem Gruppenfilter und durchsucht Fragen und Antworten. Sie reagiert nach kurzer Tipppause oder sofort mit Enter. Auf schmalen Ansichten stehen die Felder untereinander. Die Aktionsbuttons in FAQ- und Gruppenverwaltung sind jetzt mit Shopwares Größe „large“ deutlich größer.
 
 ### Seit 1.1.6

@@ -23,7 +23,19 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../src/Resources/app/ad
 assert.equal(moduleDefinition.navigation.length, 3);
 const [parent, faqs, groups] = moduleDefinition.navigation;
 assert.equal(parent.parent, 'sw-catalogue');
-assert.equal(parent.path, undefined);
+assert.equal(parent.path, 'tuami.faq.index');
+// Shopware follows meta.parentPath to determine active navigation entries.
+for (const [key, expected] of Object.entries({ index: faqs.path, create: faqs.path, detail: faqs.path, groups: groups.path, groupCreate: groups.path, groupDetail: groups.path })) {
+    const active = new Set(['tuami.faq.' + key]);
+    let route = moduleDefinition.routes[key];
+    while (route.meta.parentPath) {
+        assert(!active.has(route.meta.parentPath), 'No cyclic route ancestry');
+        active.add(route.meta.parentPath);
+        route = moduleDefinition.routes[route.meta.parentPath.split('.').at(-1)];
+    }
+    assert.equal([faqs, groups].filter(entry => active.has(entry.path)).length, 1);
+    assert(active.has(expected));
+}
 for (const entry of [faqs, groups]) {
     assert.equal(entry.parent, parent.id);
     assert.equal(entry.privilege, 'tuami_faq.viewer');
@@ -56,7 +68,7 @@ console.log('PASS navigation hierarchy, labels, creation permissions, header ico
     assert(def.template.includes('flex-wrap:wrap'));
     for (const name of ['tuami-faq-list', 'tuami-faq-group-list', 'tuami-faq-detail', 'tuami-faq-group-detail']) {
         const buttons = components[name].template.match(/<mt-button\b[^>]*>/g);
-        assert(buttons.every(button => button.includes('size="large"')));
+        assert(buttons.every(button => button.includes('size="default"')));
     }
     const queries = [];
     const instance = { ...def.data(), repository: { search: async criteria => { queries.push(criteria); return { total: 2 }; } } };

@@ -7,10 +7,10 @@ const faqListTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.list.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
+        <mt-button size="default" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
             {{ $t('tuami-faq.general.groups') }}
         </mt-button>
-        <mt-button size="large"
+        <mt-button size="default"
             variant="primary"
             :disabled="!acl.can('tuami_faq.creator') || undefined"
             @click="$router.push({ name: 'tuami.faq.create' })">
@@ -23,13 +23,16 @@ const faqListTemplate = `
     <template #content>
         <div style="display:flex;flex-direction:column;height:100%;min-height:0;">
             <div style="padding:16px 24px;flex-shrink:0;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;">
+                <div style="flex:2 1 280px;min-width:0;">
                 <mt-text-field
                     :model-value="term"
                     :label="$t('tuami-faq.list.searchLabel')"
                     :placeholder="$t('tuami-faq.list.searchPlaceholder')"
-                    style="flex:1 1 280px;min-width:0;margin-bottom:0;"
+                    style="width:100%;margin-bottom:0;"
                     @update:model-value="onSearchInput"
                     @keydown.enter="onSearch(term)" />
+                </div>
+                <div style="flex:1 1 240px;min-width:0;">
                 <sw-entity-single-select
                     :value="groupFilterId"
                     entity="tuami_faq_group"
@@ -37,8 +40,9 @@ const faqListTemplate = `
                     :label="$t('tuami-faq.list.groupFilter')"
                     :placeholder="$t('tuami-faq.list.allGroups')"
                     show-clearable-button
-                    style="flex:1 1 240px;min-width:0;max-width:400px;margin-bottom:0;"
+                    style="width:100%;margin-bottom:0;"
                     @update:value="onGroupFilterChange" />
+                </div>
             </div>
             <div style="position:relative;flex:1;min-height:0;">
         <sw-loader v-if="isLoading" />
@@ -76,10 +80,10 @@ const groupListTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span>{{ $t('tuami-faq.groupList.title') }} <span v-if="!isLoading">({{ total }})</span></span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
+        <mt-button size="default" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
             {{ $t('tuami-faq.general.faqs') }}
         </mt-button>
-        <mt-button size="large"
+        <mt-button size="default"
             variant="primary"
             :disabled="!acl.can('tuami_faq.creator') || undefined"
             @click="$router.push({ name: 'tuami.faq.groupCreate' })">
@@ -120,10 +124,10 @@ const faqDetailTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.detail.newTitle') : (entity && entity.question) }}</span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
+        <mt-button size="default" variant="secondary" @click="$router.push({ name: 'tuami.faq.index' })">
             {{ $t('tuami-faq.general.cancel') }}
         </mt-button>
-        <mt-button size="large"
+        <mt-button size="default"
             variant="primary"
             :is-loading="isSaving"
             :disabled="!canSave || undefined"
@@ -170,10 +174,10 @@ const groupDetailTemplate = `
         <h2 style="display:flex;align-items:center;gap:8px;"><tm-faq-icon /><span style="overflow:hidden;text-overflow:ellipsis;">{{ isCreate ? $t('tuami-faq.groupDetail.newTitle') : (entity && entity.name) }}</span></h2>
     </template>
     <template #smart-bar-actions>
-        <mt-button size="large" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
+        <mt-button size="default" variant="secondary" @click="$router.push({ name: 'tuami.faq.groups' })">
             {{ $t('tuami-faq.general.cancel') }}
         </mt-button>
-        <mt-button size="large"
+        <mt-button size="default"
             variant="primary"
             :is-loading="isSaving"
             :disabled="!canSave || undefined"
@@ -587,8 +591,8 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.7',
-    targetVersion: '1.1.7',
+    version: '1.1.8',
+    targetVersion: '1.1.8',
     snippets: {
         'de-DE': {
             'tuami-faq': {
@@ -772,7 +776,7 @@ Module.register('tuami-faq', {
         groups: {
             component: 'tuami-faq-group-list',
             path: 'groups',
-            meta: { parentPath: 'tuami.faq.index', privilege: 'tuami_faq.viewer' },
+            meta: { privilege: 'tuami_faq.viewer' },
         },
         groupCreate: {
             component: 'tuami-faq-group-detail',
@@ -788,6 +792,7 @@ Module.register('tuami-faq', {
     navigation: [{
         id: 'tuami-faq',
         label: 'tuami-faq.general.mainMenuItem',
+        path: 'tuami.faq.index',
         color: '#0870d1',
         icon: 'regular-comments',
         parent: 'sw-catalogue',
