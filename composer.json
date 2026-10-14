@@ -21,8 +21,16 @@
       "en-GB": "TM FAQ Pro"
     },
     "description": {
-      "de-DE": "Mehrsprachige FAQs gezielt auf Produktseiten, Kategorieseiten und in Erlebniswelten ausspielen.",
-      "en-GB": "Display multilingual FAQs specifically on product pages, category pages, and in Shopping Experiences."
+      "de-DE": "Mehrsprachige FAQs für Produkte, Kategorien und Erlebniswelten: Gruppen gezielt zuordnen, Fragen zentral verwalten und Farben sowie Layout im Shop individuell anpassen.",
+      "en-GB": "Multilingual FAQs for products, categories and Shopping Experiences: assign groups precisely, manage questions centrally and customize colors and layouts for your shop."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://github.com/tuami",
+      "en-GB": "https://github.com/tuami"
+    },
+    "supportLink": {
+      "de-DE": "https://github.com/tuami/TuamiFaqPro/issues",
+      "en-GB": "https://github.com/tuami/TuamiFaqPro/issues"
     }
   },
   "autoload": {
