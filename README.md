@@ -59,7 +59,7 @@ Version 1.1.3 berücksichtigt die Schnittstellenänderungen bis Shopware 6.7.15.
 
 ## Installation
 
-Der Arbeitsstand 1.1.4 ist noch nicht freigegeben. Der Release-Download liefert weiterhin die zuletzt veröffentlichte Version.
+Der Arbeitsstand 1.1.5 ist eine Testversion und noch nicht öffentlich freigegeben. Der Release-Download liefert weiterhin die zuletzt veröffentlichte Version.
 
 [TuamiFaqPro.zip aus dem neuesten Release herunterladen](https://github.com/tuami/TuamiFaqPro/releases/latest/download/TuamiFaqPro.zip)
 
@@ -96,6 +96,10 @@ Kategoriezuordnungen gelten ausschließlich für die direkt ausgewählten Katego
 | Keine Zuordnung | Nur durch manuelle Platzierung in den Erlebniswelten |
 
 Mehrere Produktzuordnungen werden mit **ODER** verknüpft. Verkaufskanal, aktive Gruppe und eine gegebenenfalls hinterlegte Regel müssen ebenfalls passen.
+
+## Darstellung der Überschrift
+
+Unter **Plugin-Konfiguration → Verhalten → Darstellung der Überschrift** stehen **Zentriert**, **Linksbündig** und **Ausblenden** zur Verfügung. Standard bleibt zentriert. In jedem FAQ-Erlebniswelt-Element kann diese Einstellung separat überschrieben werden; **Plugin-Einstellung übernehmen** verwendet die Konfiguration des jeweiligen Verkaufskanals. Der Überschriftentext bleibt beim Ausblenden gespeichert. Eine leere Textangabe übernimmt weiterhin die Standardüberschrift.
 
 ## Entwicklung und Build
 

@@ -423,7 +423,8 @@ Component.register('tuami-faq-group-detail', createDetailComponent(
 Component.register('sw-cms-el-tuami-faq', {
     template: `
         <div class="sw-cms-el-tuami-faq">
-            <h3 style="display:flex;align-items:center;"><tm-faq-icon />{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
+            <h3 v-if="element.config.headlineDisplay.value !== 'hidden'" style="display:flex;align-items:center;" :style="{ justifyContent: element.config.headlineDisplay.value === 'left' ? 'flex-start' : 'center' }"><tm-faq-icon />{{ element.config.headline.value || $t('tuami-faq.cms.label') }}</h3>
+            <small v-if="element.config.headlineDisplay.value === 'inherit'">{{ $t('tuami-faq.cms.headlinePreviewHint') }}</small>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionOne') }}</div>
             <div style="border-top: 1px solid #d1d9e0; padding: 12px 0;">{{ $t('tuami-faq.cms.previewQuestionTwo') }}</div>
         </div>`,
@@ -455,9 +456,20 @@ Component.register('sw-cms-el-config-tuami-faq', {
                 v-model="element.config.headline.value"
                 :label="$t('tuami-faq.cms.headline')"
                 @update:model-value="onElementUpdate" />
+            <sw-single-select
+                v-model:value="element.config.headlineDisplay.value"
+                :label="$t('tuami-faq.cms.headlineDisplay')"
+                :help-text="$t('tuami-faq.cms.headlineDisplayHelp')"
+                :options="headlineDisplayOptions"
+                @update:value="onElementUpdate" />
         </div>`,
     emits: ['element-update'],
     mixins: [Mixin.getByName('cms-element')],
+    computed: {
+        headlineDisplayOptions() {
+            return ['inherit', 'center', 'left', 'hidden'].map(value => ({ value, label: this.$t('tuami-faq.cms.headlineDisplay_' + value) }));
+        },
+    },
     created() {
         this.initElementConfig('tuami-faq');
     },
@@ -477,6 +489,7 @@ Shopware.Service('cmsService').registerCmsElement({
     defaultConfig: {
         groupId: { source: 'static', value: null },
         headline: { source: 'static', value: '' },
+        headlineDisplay: { source: 'static', value: 'inherit' },
     },
 });
 
@@ -518,8 +531,8 @@ Module.register('tuami-faq', {
     color: '#0870d1',
     icon: 'regular-comments',
     entity: 'tuami_faq',
-    version: '1.1.4',
-    targetVersion: '1.1.4',
+    version: '1.1.5',
+    targetVersion: '1.1.5',
     snippets: {
         'de-DE': {
             'tuami-faq': {
@@ -586,6 +599,13 @@ Module.register('tuami-faq', {
                     label: 'TM FAQ Pro',
                     group: 'FAQ-Gruppe',
                     headline: 'Überschrift',
+                    headlineDisplay: 'Darstellung der Überschrift',
+                    headlineDisplayHelp: 'Gilt nur für dieses Element. Der Überschriftentext bleibt beim Ausblenden gespeichert.',
+                    headlineDisplay_inherit: 'Plugin-Einstellung übernehmen',
+                    headlineDisplay_center: 'Zentriert',
+                    headlineDisplay_left: 'Linksbündig',
+                    headlineDisplay_hidden: 'Ausblenden',
+                    headlinePreviewHint: 'Die Darstellung der Überschrift folgt im Shop der Plugin-Einstellung des Verkaufskanals.',
                     previewQuestionOne: 'Wie funktioniert dieses Produkt?',
                     previewQuestionTwo: 'Welche Vorteile bietet es?',
                 },
@@ -656,6 +676,13 @@ Module.register('tuami-faq', {
                     label: 'TM FAQ Pro',
                     group: 'FAQ group',
                     headline: 'Headline',
+                    headlineDisplay: 'Heading display',
+                    headlineDisplayHelp: 'Applies only to this element. Hiding preserves the heading text.',
+                    headlineDisplay_inherit: 'Inherit plugin setting',
+                    headlineDisplay_center: 'Centered',
+                    headlineDisplay_left: 'Left-aligned',
+                    headlineDisplay_hidden: 'Hide',
+                    headlinePreviewHint: 'In the storefront, the heading follows the sales channel plugin setting.',
                     previewQuestionOne: 'How does this product work?',
                     previewQuestionTwo: 'What are its benefits?',
                 },

@@ -63,3 +63,16 @@ if ($data['mainEntity'][0]['acceptedAnswer']['text'] !== 'Antwort & Details' || 
     throw new RuntimeException('Structured FAQ output changed or unsafe script boundary');
 }
 echo "PASS Twig component renders in isolated context and JSON-LD round-trips safely\n";
+foreach (['center', 'left', 'hidden'] as $display) {
+    $style['headlineDisplay'] = $display;
+    $html = $twig->render('storefront/component/tuami-faq-list.html.twig', ['faqData' => [
+        'headline' => 'FAQ', 'style' => $style, 'enableJsonLd' => false,
+        'items' => [['question' => 'Frage', 'answer' => 'Antwort']],
+    ]]);
+    if ((str_contains($html, '<h2 ') !== ($display !== 'hidden'))
+        || (str_contains($html, 'tuami-faq-pro__title--left') !== ($display === 'left'))
+        || ($display === 'hidden' && (!str_contains($html, 'aria-label="FAQ"') || str_contains($html, 'aria-labelledby=')))) {
+        throw new RuntimeException('Heading rendering failed: ' . $display);
+    }
+}
+echo "PASS heading modes: centered, left-aligned, hidden without orphan ARIA reference\n";

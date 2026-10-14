@@ -29,6 +29,7 @@
         </card>
     <card>
         <title>Behavior</title><title lang="de-DE">Verhalten</title>
+        <input-field type="single-select" cache-relevant="true"><name>headlineDisplay</name><label>Heading display</label><label lang="de-DE">Darstellung der Überschrift</label><helpText>Can be overridden for individual Shopping Experiences elements. Hiding preserves the heading text.</helpText><helpText lang="de-DE">Im Erlebniswelt-Element überschreibbar. Beim Ausblenden bleibt der Überschriftentext gespeichert.</helpText><defaultValue>center</defaultValue><options><option><id>center</id><name>Centered</name><name lang="de-DE">Zentriert</name></option><option><id>left</id><name>Left-aligned</name><name lang="de-DE">Linksbündig</name></option><option><id>hidden</id><name>Hide</name><name lang="de-DE">Ausblenden</name></option></options></input-field>
         <input-field type="bool" cache-relevant="true"><name>openFirstItem</name><label>Open first question initially</label><label lang="de-DE">Erste Frage standardmäßig öffnen</label><defaultValue>true</defaultValue></input-field>
     </card>
 </config>

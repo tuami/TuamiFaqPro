@@ -22,8 +22,15 @@ final class FaqPresentationConfig
     }
 
     /** @return array{layoutStyle:string,widthMode:string,maxWidth:int,itemGap:int,borderRadius:int,dividerColor:string,useItemBackground:bool,itemBackgroundColor:string,activeBackgroundColor:string,activeTextColor:string,openFirstItem:bool} */
-    public function style(string $salesChannelId): array
+    public function style(string $salesChannelId, ?string $headlineOverride = null): array
     {
+        $headlineDisplay = (string) ($this->systemConfigService->get('TuamiFaqPro.config.headlineDisplay', $salesChannelId) ?? 'center');
+        if (\in_array($headlineOverride, ['center', 'left', 'hidden'], true)) {
+            $headlineDisplay = $headlineOverride;
+        }
+        if (!\in_array($headlineDisplay, ['center', 'left', 'hidden'], true)) {
+            $headlineDisplay = 'center';
+        }
         $widthMode = (string) ($this->systemConfigService->get('TuamiFaqPro.config.widthMode', $salesChannelId) ?? 'standard');
         if (!\in_array($widthMode, ['standard', 'custom', 'full'], true)) {
             $widthMode = 'standard';
@@ -38,6 +45,7 @@ final class FaqPresentationConfig
         $activeColorMode = (string) ($this->systemConfigService->get('TuamiFaqPro.config.activeColorMode', $salesChannelId) ?? 'primary');
 
         return [
+            'headlineDisplay' => $headlineDisplay,
             'layoutStyle' => $layoutStyle,
             'widthMode' => $widthMode,
             'maxWidth' => $widthMode === 'custom' ? $customMaxWidth : 960,

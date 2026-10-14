@@ -93,7 +93,7 @@ final class FaqCmsElementResolver extends AbstractCmsElementResolver
         $slot->setData(new ArrayStruct([
             'items' => $items,
             'headline' => $headline,
-            'style' => $this->presentationConfig->style($salesChannelId),
+            'style' => $this->presentationConfig->style($salesChannelId, $slot->getFieldConfig()->get('headlineDisplay')?->getStringValue()),
             'enableJsonLd' => $this->systemConfigService->getBool('TuamiFaqPro.config.enableJsonLd', $salesChannelId),
         ], 'tuami_faq_cms_data'));
     }

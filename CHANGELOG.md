@@ -1,6 +1,11 @@
 # Changelog
 
-## 1.1.4 (in Vorbereitung)
+## 1.1.5 (Testversion)
+
+- Überschrift unter Verhalten zentrierbar, linksbündig oder ausblendbar; pro Erlebniswelt-Element überschreibbar
+- Sanfte FAQ-Animation und Plus-/Minus-Übergang mit Unterstützung für reduzierte Bewegung
+
+## 1.1.4 (Testversion)
 
 - Cache-Tags auch für Seiten ohne passende FAQs; Invalidierung bei FAQ-, Gruppen-, Übersetzungs- und Produktgruppenänderungen
 - FAQ-Antworten werden erst nach Ermittlung der passenden Gruppen geladen
@@ -8,7 +13,7 @@
 - Übersetzte Standardüberschrift mit korrekt benannten Storefront-Sprachdateien
 - Styles ausschließlich über Shopwares SCSS-/Theme-Verarbeitung
 - Eigenen JavaScript-Bundler durch den offiziellen Shopware-CLI-Build ersetzt
-- Noch kein Installationspaket freigegeben: offizieller Build und vollständiger Shopware-Test ausstehend
+- Offizieller Shopware-CLI-Build bestanden; noch kein öffentliches Release
 
 ## 1.1.3
 

@@ -220,6 +220,20 @@ namespace {
  check($presentation->headline('channel-a')==='Meine Überschrift','custom headline preserved');
  $config->values['channel-a']=['TuamiFaqPro.config.headline'=>''];$translator->language='en';
  check($presentation->headline('channel-a')==='Frequently asked questions','empty channel headline uses translation');
+ foreach (['center','left','hidden'] as $globalDisplay) {
+  $config->values=['global'=>['TuamiFaqPro.config.headlineDisplay'=>$globalDisplay]];
+  foreach ([null,'inherit','invalid'] as $override) {
+   check($presentation->style('channel-a',$override)['headlineDisplay']===$globalDisplay,'heading inherits '.$globalDisplay.' for '.($override??'legacy slot'));
+  }
+  foreach (['center','left','hidden'] as $override) {
+   check($presentation->style('channel-a',$override)['headlineDisplay']===$override,'CMS heading '.$override.' overrides '.$globalDisplay);
+  }
+ }
+ $config->values=['global'=>['TuamiFaqPro.config.headlineDisplay'=>'invalid']];
+ check($presentation->style('channel-a')['headlineDisplay']==='center','invalid heading mode defaults to center');
+ $config->values=['channel-a'=>['TuamiFaqPro.config.headlineDisplay'=>'left']];
+ check($presentation->style('channel-a')['headlineDisplay']==='left','heading respects sales channel');
+ check($presentation->style('channel-b')['headlineDisplay']==='center','legacy configuration remains centered');
 
  $invalidator=new \Shopware\Core\Framework\Adapter\Cache\CacheInvalidator();
  $subscriber=new \Tuami\FaqPro\Storefront\Subscriber\FaqCacheSubscriber($invalidator);

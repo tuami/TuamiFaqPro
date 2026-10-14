@@ -12,6 +12,7 @@
 
     &--width-full { max-width: none; }
     &__title { margin: 0 0 1.25rem; text-align: center; }
+    &__title--left { text-align: left; }
     &__items { display: grid; gap: var(--tuami-faq-gap); }
     &__item { border: 0; border-radius: var(--tuami-faq-radius); background: var(--tuami-faq-surface); overflow: hidden; }
     &--transparent &__item { background: transparent; }
@@ -20,9 +21,9 @@
     &__question::-webkit-details-marker { display: none; }
     &__question:focus-visible { outline: 3px solid currentColor; outline-offset: -3px; }
     &__marker { position: relative; width: 1rem; height: 1rem; flex: 0 0 1rem; }
-    &__marker::before, &__marker::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: currentColor; transform: translateY(-50%); }
-    &__marker::after { transform: translateY(-50%) rotate(90deg); transition: transform .18s ease; }
-    &__item[open] &__marker::after { transform: translateY(-50%) rotate(0deg); }
+    &__marker::before, &__marker::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; border-radius: 1px; background: currentColor; transform: translateY(-50%); }
+    &__marker::after { transform: translateY(-50%) rotate(90deg) scaleX(1); opacity: 1; transition: transform .22s cubic-bezier(.2, 0, 0, 1), opacity .16s ease; }
+    &__item[open] &__marker::after { transform: translateY(-50%) rotate(90deg) scaleX(0); opacity: 0; }
     &__answer { padding: 1.5rem; }
     &__answer > :last-child { margin-bottom: 0; }
 
@@ -31,6 +32,33 @@
     &--layout-dividers &__item { border-bottom: 1px solid var(--tuami-faq-divider); }
     &--layout-dividers &__question,
     &--layout-dividers &__answer { padding-inline: 1.5rem; }
+}
+
+// Progressive enhancement: native details remain usable without CSS support or JS.
+// Animate the actual content size, without a fixed max-height that clips long answers.
+@supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) and selector(details::details-content) {
+    .tuami-faq-pro__item::details-content {
+        interpolate-size: allow-keywords;
+        block-size: 0;
+        overflow: clip;
+        opacity: 0;
+        transition: block-size .22s cubic-bezier(.2, 0, 0, 1), opacity .16s ease, content-visibility .22s allow-discrete;
+    }
+
+    .tuami-faq-pro__item[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+        transition-duration: .28s, .2s, .28s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tuami-faq-pro__question,
+    .tuami-faq-pro__marker::after,
+    .tuami-faq-pro__item[open]::details-content,
+    .tuami-faq-pro__item::details-content {
+        transition: none;
+    }
 }
 
 .tuami-faq-pro-product, .tuami-faq-pro-detail { padding-block: 1rem; }

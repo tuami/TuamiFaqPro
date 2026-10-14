@@ -1,11 +1,13 @@
 {% set faqHeadline = faqData.headline %}
 {% set faqTitleId = 'tuami-faq-pro-title-' ~ random() %}
 {% set faqStyle = faqData.style %}
+{% set faqHeadlineDisplay = faqStyle.headlineDisplay|default('center') %}
+{% set faqShowHeadline = faqHeadline and faqHeadlineDisplay != 'hidden' %}
 
 <section class="tuami-faq-pro tuami-faq-pro--layout-{{ faqStyle.layoutStyle }} tuami-faq-pro--width-{{ faqStyle.widthMode }}{% if not faqStyle.useItemBackground %} tuami-faq-pro--transparent{% endif %}"
     style="--tuami-faq-max-width: {{ faqStyle.maxWidth }}px; --tuami-faq-gap: {{ faqStyle.itemGap }}px; --tuami-faq-radius: {{ faqStyle.borderRadius }}px; --tuami-faq-divider: {{ faqStyle.dividerColor }}; --tuami-faq-surface: {{ faqStyle.itemBackgroundColor }}; --tuami-faq-active: {{ faqStyle.activeBackgroundColor }}; --tuami-faq-active-text: {{ faqStyle.activeTextColor }};"
-    aria-labelledby="{{ faqTitleId }}">
-    {% if faqHeadline %}<h2 id="{{ faqTitleId }}" class="tuami-faq-pro__title">{{ faqHeadline }}</h2>{% endif %}
+    {% if faqShowHeadline %}aria-labelledby="{{ faqTitleId }}"{% elseif faqHeadline %}aria-label="{{ faqHeadline }}"{% endif %}>
+    {% if faqShowHeadline %}<h2 id="{{ faqTitleId }}" class="tuami-faq-pro__title{% if faqHeadlineDisplay == 'left' %} tuami-faq-pro__title--left{% endif %}">{{ faqHeadline }}</h2>{% endif %}
     <div class="tuami-faq-pro__items">
         {% for faq in faqData.items %}
             <details class="tuami-faq-pro__item"{% if loop.first and faqStyle.openFirstItem %} open{% endif %}>
